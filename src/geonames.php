@@ -1,6 +1,6 @@
 <?php
 
-namespace alibe\phpGeonamesorg;
+namespace Alibe\PhpGeonamesorg;
 
 class geonames {
 

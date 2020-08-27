@@ -15,6 +15,6 @@
         "guzzlehttp/guzzle": "^6.5"
     },
     "autoload": {
-        "psr-4": {"Alibe\\phpGeonamesorg\\": "src/"}
+        "psr-4": {"Alibe\\PhpGeonamesorg\\": "src/"}
     }
 }
