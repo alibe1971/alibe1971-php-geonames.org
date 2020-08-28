@@ -3,6 +3,11 @@
     "description": "Script for the GeoNames.org API",
     "version": "0.0.1",
     "type": "library",
+    "keywords": [
+        "geonames",
+        "rest",
+        "web service",
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -12,6 +17,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
+        "php": ">=5.5",
         "guzzlehttp/guzzle": "^6.5"
     },
     "autoload": {

@@ -11,7 +11,11 @@ return [
     |
     */
 
-    'version'=>'0.0.0',
-    'clID'=>'GeoNames.Org ID'
+    'baseHost'=>'http://api.geonames.org/',
+    'connection'=> [
+        'clID'=>'GeoNames.Org ID',
+        'lang'=>'en',
+        'format'=>'array'
+    ]
 
 ];
