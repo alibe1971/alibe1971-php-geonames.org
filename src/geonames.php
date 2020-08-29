@@ -118,33 +118,16 @@ class geonames {
      /* GeoBox Webservices */
     /**********************/
     public function cities() {
-        $box=$this->conn['settings']['geoBox'];
-        return $this->exe->get([
-            'cmd'=>'cities',
-            'query'=>[
-              'north'=>$box['N'],
-              'south'=>$box['S'],
-              'east'=>$box['E'],
-              'west'=>$box['W'],
-              'maxRows'=>$this->conn['settings']['maxRows']
-          ]
+        return $this->execByGeoBox('cities',[
+            'maxRows'=>$this->conn['settings']['maxRows']
         ]);
     }
 
     public function earthquakes() {
-        $box=$this->conn['settings']['geoBox'];
-        $date=date('Y-m-d',strtotime($this->conn['settings']['date']));
-        return $this->exe->get([
-            'cmd'=>'earthquakes',
-            'query'=>[
-              'north'=>$box['N'],
-              'south'=>$box['S'],
-              'east'=>$box['E'],
-              'west'=>$box['W'],
-              'maxRows'=>$this->conn['settings']['maxRows'],
-              'date'=>$date,
-              'minMagnitude'=>$this->conn['settings']['minMagnitude'],
-          ]
+        return $this->execByGeoBox('earthquakes',[
+            'maxRows'=>$this->conn['settings']['maxRows'],
+            'date'=>date('Y-m-d',strtotime($this->conn['settings']['date'])),
+            'minMagnitude'=>$this->conn['settings']['minMagnitude'],
         ]);
     }
 
@@ -152,16 +135,8 @@ class geonames {
      /* Weather Webservices */
     /***********************/
     public function weather() {
-        $box=$this->conn['settings']['geoBox'];
-        return $this->exe->get([
-            'cmd'=>'weather',
-            'query'=>[
-              'north'=>$box['N'],
-              'south'=>$box['S'],
-              'east'=>$box['E'],
-              'west'=>$box['W'],
-              'maxRows'=>$this->conn['settings']['maxRows']
-          ]
+        return $this->execByGeoBox('weather',[
+            'maxRows'=>$this->conn['settings']['maxRows']
         ]);
     }
     public function weatherIcao($id) {
@@ -170,6 +145,56 @@ class geonames {
             'query'=>[
                 'ICAO'=>$id
             ]
+        ]);
+    }
+
+    public function findNearByWeather() {
+        return $this->execByPosition('findNearByWeather');
+    }
+
+      /*************************/
+     /* Altitude Webservices  */
+    /*************************/
+    public function srtm1() {
+        return $this->execByPosition('srtm1');
+    }
+    public function srtm3() {
+        return $this->execByPosition('srtm3');
+    }
+    public function astergdem() {
+        return $this->execByPosition('astergdem');
+    }
+    public function gtopo30() {
+        return $this->execByPosition('gtopo30');
+    }
+
+
+      /*************************/
+     /* Execute by position   */
+    /*************************/
+    public function execByPosition($cmd, $ar=[]) {
+        $query=array_merge($this->conn['settings']['position'],$ar);
+        return $this->exe->get([
+            'cmd'=>$cmd,
+            'query'=>$query
+        ]);
+    }
+
+      /***********************/
+     /* Execute by geoBox   */
+    /***********************/
+    public function execByGeoBox($cmd, $ar=[]) {
+        $box=$this->conn['settings']['geoBox'];
+        $box=[
+            'north'=>$box['N'],
+            'south'=>$box['S'],
+            'east'=>$box['E'],
+            'west'=>$box['W'],
+        ];
+        $query=array_merge($box,$ar);
+        return $this->exe->get([
+            'cmd'=>$cmd,
+            'query'=>$query
         ]);
     }
 
