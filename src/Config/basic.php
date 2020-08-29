@@ -29,7 +29,7 @@ return [
         ],
         'maxRows'=>200,
         'date'=>'today',
-        'minMagnitude'=0
+        'minMagnitude'=>0
     ]
 
 ];
