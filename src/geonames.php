@@ -74,6 +74,15 @@ class geonames {
         ]);
     }
 
+    public function siblings($id) {
+        return $this->exe->get([
+            'cmd'=>'siblings',
+            'query'=>[
+                'geonameId'=>$id
+            ]
+        ]);
+    }
+
     public function neighbours($id) {
         $query=[
             'geonameId'=>$id
