@@ -34,9 +34,10 @@ class geonames {
         return $this->countryInfo($cc);
     }
 
+  /***********************************/
+ /* Geonames.org Original functions */
+/***********************************/
 
-
-    /* Geonames Original functions */
     public function get($id) {
         return $this->exe->get([
             'cmd'=>'get',
@@ -55,12 +56,15 @@ class geonames {
         ]);
     }
 
-
-    public function children($id) {
+      /*******************************/
+     /* Place Hierarchy Webservices */
+    /*******************************/
+    public function children($id,$hrk=false) {
         return $this->exe->get([
             'cmd'=>'children',
             'query'=>[
-                'geonameId'=>$id
+                'geonameId'=>$id,
+                'hierarchy'=>$hrk
             ]
         ]);
     }
@@ -98,7 +102,33 @@ class geonames {
         ]);
     }
 
+    public function contains($id) {
+        // [TODO] feature class and/or feature code
+        return $this->exe->get([
+            'cmd'=>'contains',
+            'query'=>[
+                'geonameId'=>$id
+            ]
+        ]);
+    }
 
-    // Functions that need position
+
+
+      /**********************/
+     /* GeoBox Webservices */
+    /**********************/
+    public function cities() {
+        $box=$this->conn['settings']['geoBox'];
+        return $this->exe->get([
+            'cmd'=>'cities',
+            'query'=>[
+              'north'=>$box['N'],
+              'south'=>$box['S'],
+              'east'=>$box['E'],
+              'west'=>$box['W'],
+              'maxRows'=>$this->conn['settings']['maxRows']
+          ]
+        ]);
+    }
 
 }
