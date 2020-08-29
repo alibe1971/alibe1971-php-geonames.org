@@ -65,4 +65,31 @@ class geonames {
         ]);
     }
 
+    public function hierarchy($id) {
+        return $this->exe->get([
+            'cmd'=>'hierarchy',
+            'query'=>[
+                'geonameId'=>$id
+            ]
+        ]);
+    }
+
+    public function neighbours($id) {
+        $query=[
+            'geonameId'=>$id
+        ];
+        if(intval($id)==0) {
+            $query=[
+                'country'=>$id
+            ];
+        }
+        return $this->exe->get([
+            'cmd'=>'neighbours',
+            'query'=>$query
+        ]);
+    }
+
+
+    // Functions that need position
+
 }
