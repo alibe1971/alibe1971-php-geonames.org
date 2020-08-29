@@ -8,14 +8,14 @@ class Exec {
     public function __construct($conn) {
         $this->conn=$conn;
         $this->conn['baseHost']=rtrim($this->conn['baseHost'],'/');
-        $this->conn['cmdSuffix']=$this->getSuffix(mb_strtolower($conn['connection']['format']));
+        $this->conn['cmdSuffix']=$this->getSuffix(mb_strtolower($conn['settings']['format']));
     }
 
     public function get(array $par) {
         $url=$this->conn['baseHost'].'/'.
             $par['cmd'].$this->conn['cmdSuffix'].
-            '?username='.$this->conn['connection']['clID'].
-            '&lang='.$this->conn['connection']['lang'];
+            '?username='.$this->conn['settings']['clID'].
+            '&lang='.$this->conn['settings']['lang'];
 
         if(isSet($par['query'])) {
             foreach ($par['query'] as $k => $v) {
@@ -28,18 +28,20 @@ class Exec {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
         curl_close($ch);
-        if($par['final']) {
-            return $this->output($response, $this->conn['connection']['format']);
-        }
-        return json_decode($response);
+        return $this->output($response, $this->conn['settings']['format']);
     }
 
     protected function output($res,$format) {
         if(!is_array($res)) {
             switch($format) {
                 case 'array':
-                    return json_decode($res);
+                    return (array) json_decode($res, true);
                 break;
+
+                case 'object':
+                    return (object) json_decode($res);
+                break;
+
                 default:
                     return $res;
             }
@@ -48,6 +50,10 @@ class Exec {
         switch($format) {
             case 'array':
                 return $res;
+            break;
+
+            case 'object':
+                return (object) $res;
             break;
 
             case 'json':
@@ -63,9 +69,9 @@ class Exec {
     protected function getSuffix($format) {
         $suffix=[
             'array'=>'JSON',
+            'object'=>'JSON',
             'json'=>'JSON',
-            'xml'=>'',
-            'csv'=>'CSV'
+            'xml'=>''
         ];
         if(isSet($suffix[$format])) {
             return $suffix[$format];
