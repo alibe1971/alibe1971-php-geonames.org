@@ -12,7 +12,7 @@ return [
     */
 
     'baseHost'=>'http://api.geonames.org/',
-    'connection'=> [
+    'settings'=> [
         'clID'=>'GeoNames.Org ID',
         'lang'=>'en',
         'format'=>'array'
