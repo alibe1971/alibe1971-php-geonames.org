@@ -18,7 +18,7 @@ return [
         'format'=>'array',
         'position'=>[
             'lat'=>0,           // Latitude
-            'lon'=>0,           // Longitude
+            'lng'=>0,           // Longitude
             'radius'=>0,        // Radius in Km
         ],
         'geoBox'=>[
