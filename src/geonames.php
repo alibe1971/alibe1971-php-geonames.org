@@ -168,6 +168,23 @@ class geonames {
         return $this->execByPosition('gtopo30');
     }
 
+      /*************************/
+     /* Position Webservices  */
+    /*************************/
+    public function countryCode() {
+        return $this->execByPosition('countryCode');
+    }
+    public function ocean() {
+        return $this->execByPosition('ocean');
+    }
+    public function timezone() {
+        return $this->execByPosition('timezone',[
+            'date'=>date('Y-m-d',strtotime($this->conn['settings']['date'])),
+        ]);
+    }
+    // public function gtopo30() {
+    //     return $this->execByPosition('gtopo30');
+    // }
 
       /*************************/
      /* Execute by position   */
