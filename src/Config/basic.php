@@ -17,9 +17,15 @@ return [
         'lang'=>'en',
         'format'=>'array',
         'position'=>[
-            'lat'=>0,
-            'lon'=>0,
-            'radius'=>0,
+            'lat'=>0,           // Latitude
+            'lon'=>0,           // Longitude
+            'radius'=>0,        // Radius in Km
+        ],
+        'geoBox'=>[
+            'N'=>0,             // North
+            'S'=>0,             // South
+            'E'=>0,             // East
+            'W'=>0,             // West
         ],
     ]
 
