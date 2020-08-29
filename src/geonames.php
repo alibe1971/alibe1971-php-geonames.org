@@ -148,4 +148,29 @@ class geonames {
         ]);
     }
 
+      /***********************/
+     /* Weather Webservices */
+    /***********************/
+    public function weather() {
+        $box=$this->conn['settings']['geoBox'];
+        return $this->exe->get([
+            'cmd'=>'weather',
+            'query'=>[
+              'north'=>$box['N'],
+              'south'=>$box['S'],
+              'east'=>$box['E'],
+              'west'=>$box['W'],
+              'maxRows'=>$this->conn['settings']['maxRows']
+          ]
+        ]);
+    }
+    public function weatherIcao($id) {
+        return $this->exe->get([
+            'cmd'=>'weatherIcao',
+            'query'=>[
+                'ICAO'=>$id
+            ]
+        ]);
+    }
+
 }
