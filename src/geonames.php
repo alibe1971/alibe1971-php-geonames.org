@@ -131,4 +131,21 @@ class geonames {
         ]);
     }
 
+    public function earthquakes() {
+        $box=$this->conn['settings']['geoBox'];
+        $date=date('Y-m-d',strtotime($this->conn['settings']['date']));
+        return $this->exe->get([
+            'cmd'=>'earthquakes',
+            'query'=>[
+              'north'=>$box['N'],
+              'south'=>$box['S'],
+              'east'=>$box['E'],
+              'west'=>$box['W'],
+              'maxRows'=>$this->conn['settings']['maxRows'],
+              'date'=>$date,
+              'minMagnitude'=>$this->conn['settings']['minMagnitude'],
+          ]
+        ]);
+    }
+
 }

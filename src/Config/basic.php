@@ -27,9 +27,9 @@ return [
             'E'=>0,             // East
             'W'=>0,             // West
         ],
-        'maxRows'=>200,
-        'date'=>'today',
-        'minMagnitude'=>0
+        'maxRows'=>200,         // Max number of rows
+        'date'=>'today',        // date parameter
+        'minMagnitude'=>0       // Min mag. for earthquakes
     ]
 
 ];
