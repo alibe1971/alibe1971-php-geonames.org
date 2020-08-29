@@ -27,6 +27,7 @@ return [
             'E'=>0,             // East
             'W'=>0,             // West
         ],
+        'maxRows'=>200
     ]
 
 ];
