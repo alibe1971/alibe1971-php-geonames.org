@@ -13,44 +13,55 @@ class geonames {
         $this->conn=include('Config/basic.php');
     }
 
-    public function connect($arr=[]) {
-        $this->conn['connection']=array_merge($this->conn['connection'],$arr);
+    public function set($arr=[]) {
+        $this->conn['settings']=array_merge($this->conn['settings'],$arr);
         $this->exe=new Exec($this->conn);
         return $this;
     }
 
 
     /*Continents*/
-    public function continensGetList($final=true) {
-        return $this->childrenGet('6295630', 200, $final=true);
+    public function continensGetList() {
+        return $this->children('6295630');
     }
 
     /*Countries*/
-    public function countriesGetList($final=true) {
+    public function countriesGetList() {
+        return $this->countryInfo();
+    }
+
+    public function countryGet($cc) {
+        return $this->countryInfo($cc);
+    }
+
+
+
+    /* Geonames Original functions */
+    public function get($id) {
         return $this->exe->get([
-            'cmd'=>'countryInfo',
-            'final'=>$final
+            'cmd'=>'get',
+            'query'=>[
+                'geonameId'=>$id
+            ]
         ]);
     }
 
-    public function countryGet($cc,$final=true) {
+    public function countryInfo($cc=false) {
         return $this->exe->get([
             'cmd'=>'countryInfo',
             'query'=>[
                 'country'=>$cc
-            ],
-            'final'=>$final
+            ]
         ]);
     }
 
 
-    public function childrenGet($id,$maxRows=200,$final=true) {
+    public function children($id) {
         return $this->exe->get([
             'cmd'=>'children',
             'query'=>[
                 'geonameId'=>$id
-            ],
-            'final'=>$final
+            ]
         ]);
     }
 
