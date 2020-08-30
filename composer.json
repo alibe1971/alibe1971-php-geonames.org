@@ -1,12 +1,11 @@
 {
     "name": "alibe/php-geonamesorg",
     "description": "Script for the GeoNames.org API",
-    "version": "0.0.1",
     "type": "library",
     "keywords": [
         "geonames",
         "rest",
-        "web service",
+        "web service"
     ],
     "license": "MIT",
     "authors": [
