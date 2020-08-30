@@ -21,8 +21,8 @@ return [
             'lng'=>0,           // Longitude
             'radius'=>0,        // Radius in Km
         ],
-        'featureClass'=false,   // Class for filters
-        'featureCode'=false,    // Code for filters
+        'featureClass'=>false,   // Class for filters
+        'featureCode'=>false,    // Code for filters
         'geoBox'=>[
             'N'=>0,             // North
             'S'=>0,             // South
