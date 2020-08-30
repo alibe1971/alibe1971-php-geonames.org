@@ -14,7 +14,7 @@ class geonames {
     }
 
     public function set($arr=[]) {
-        $this->conn['settings']=array_merge($this->conn['settings'],$arr);
+        $this->conn['settings']=array_replace_recursive($this->conn['settings'],$arr);
         $this->exe=new Exec($this->conn);
         return $this;
     }
@@ -189,7 +189,13 @@ class geonames {
         return $this->execByPosition('countrySubdivision');
     }
     public function findNearby() {
-        return $this->execByPosition('findNearby');
+        return $this->execByPosition('findNearby',[
+            'featureClass'=>$this->conn['settings']['featureClass'],
+            'featureCode'=>$this->conn['settings']['featureCode'],
+        ]);
+    }
+    public function extendedFindNearby() {
+        return $this->execByPosition('extendedFindNearby');
     }
 
 
