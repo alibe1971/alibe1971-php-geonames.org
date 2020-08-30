@@ -31,7 +31,7 @@ return [
         ],
         'maxRows'=>false,       // Max number of rows
         'date'=>'today',        // date parameter
-        'minMagnitude'=>0       // Min mag. for earthquakes
+        'minMagnitude'=>0,      // Min mag. for earthquakes
 
         'wikiSearch'=>[         // Wiki Search
             'title'=>false,     // Title has priority
