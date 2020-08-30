@@ -17,9 +17,9 @@ return [
         'lang'=>'en',
         'format'=>'array',
         'position'=>[
-            'lat'=>0,           // Latitude
-            'lng'=>0,           // Longitude
-            'radius'=>0,        // Radius in Km
+            'lat'=>false,       // Latitude
+            'lng'=>false,       // Longitude
+            'radius'=>false,    // Radius in Km
         ],
         'featureClass'=>false,   // Class for filters
         'featureCode'=>false,    // Code for filters
