@@ -131,6 +131,7 @@ class geonames {
         ]);
     }
 
+
       /***********************/
      /* Weather Webservices */
     /***********************/
@@ -198,7 +199,51 @@ class geonames {
         return $this->execByPosition('extendedFindNearby');
     }
 
-
+      /*************************/
+     /* Wikipedia Webservices */
+    /*************************/
+    public function wikipediaBoundingBox() {
+        return $this->execByGeoBox('wikipediaBoundingBox',[
+            'maxRows'=>$this->conn['settings']['maxRows']
+        ]);
+    }
+    public function findNearbyWikipedia($cc=false,$zip=false) {
+        if($cc && $zip) {
+            $query=[
+                'country'=>$cc,
+                'postalcode'=>$zip,
+                'maxRows'=>$this->conn['settings']['maxRows'],
+                'radius'=>$this->conn['settings']['position']['radius'],
+            ];
+        } else {
+            $query=$this->conn['settings']['position'];
+            $query['maxRows']=$this->conn['settings']['maxRows'];
+            if($cc) {
+                $query['country']=$cc;
+            }
+        }
+        return $this->exe->get([
+            'cmd'=>'findNearbyWikipedia',
+            'query'=>$query
+        ]);
+    }
+    public function wikipediaSearch() {
+        $query=[
+            'maxRows'=>$this->conn['settings']['maxRows']
+        ];
+        if(isSet($this->conn['settings']['wikiSearch']) && is_array($this->conn['settings']['wikiSearch'])) {
+            $search=$this->conn['settings']['wikiSearch'];
+            if(isSet($search['title']) && $search['title']) {
+                $query['title']=$search['title'];
+            } elseif (isSet($search['query']) && $search['query']) {
+                $query['q']=rawurlencode(utf8_encode($search['query']));
+            }
+        }
+        return $this->exe->get([
+            'cmd'=>'wikipediaSearch',
+            'query'=>$query
+        ]);
+    }
 
 
       /*************************/
