@@ -24,12 +24,12 @@ return [
         'featureClass'=>false,   // Class for filters
         'featureCode'=>false,    // Code for filters
         'geoBox'=>[
-            'N'=>0,             // North
-            'S'=>0,             // South
-            'E'=>0,             // East
-            'W'=>0,             // West
+            'N'=>false,          // North
+            'S'=>false,          // South
+            'E'=>false,          // East
+            'W'=>false,          // West
         ],
-        'maxRows'=>200,         // Max number of rows
+        'maxRows'=>false,       // Max number of rows
         'date'=>'today',        // date parameter
         'minMagnitude'=>0       // Min mag. for earthquakes
     ]
