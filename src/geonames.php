@@ -182,9 +182,18 @@ class geonames {
             'date'=>date('Y-m-d',strtotime($this->conn['settings']['date'])),
         ]);
     }
-    // public function gtopo30() {
-    //     return $this->execByPosition('gtopo30');
-    // }
+    public function neighbourhood() {
+        return $this->execByPosition('neighbourhood');
+    }
+    public function countrySubdivision() {
+        return $this->execByPosition('countrySubdivision');
+    }
+    public function findNearby() {
+        return $this->execByPosition('findNearby');
+    }
+
+
+
 
       /*************************/
      /* Execute by position   */
