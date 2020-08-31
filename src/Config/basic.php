@@ -38,6 +38,7 @@ return [
         'isReduced'=>false,     // Is reduced var
         'charset'=>false,       // The charset
         'filter'=>false,        // Filter for the searches
+        'includeGeoName'=>false,    // For OpenStreetMap
 
         'wikiSearch'=>[         // Wiki Search
             'title'=>false,     // Title has priority
