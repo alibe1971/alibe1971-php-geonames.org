@@ -198,6 +198,37 @@ class geonames {
     public function extendedFindNearby() {
         return $this->execByPosition('extendedFindNearby');
     }
+    public function findNearbyPlaceName() {
+        return $this->execByPosition('findNearbyPlaceName',[
+            'localCountry'=>$this->conn['settings']['localCountry'],
+            'cities'=>$this->conn['settings']['cities'],
+            'style'=>$this->conn['settings']['style'],
+        ]);
+    }
+    public function findNearbyPostalCodes($cc=false,$zip=false) {
+        if($cc && $zip) {
+            $query=[
+                'country'=>$cc,
+                'postalcode'=>$zip,
+                'maxRows'=>$this->conn['settings']['maxRows'],
+                'radius'=>$this->conn['settings']['position']['radius'],
+            ];
+        } else {
+            $query=$this->conn['settings']['position'];
+            $query['maxRows']=$this->conn['settings']['maxRows'];
+            if($cc) {
+                $query['country']=$cc;
+            }
+            $query['style']=$this->conn['settings']['style'];
+            $query['localCountry']=$this->conn['settings']['localCountry'];
+            $query['isReduced']=$this->conn['settings']['isReduced'];
+        }
+        return $this->exe->get([
+            'cmd'=>'findNearbyPostalCodes',
+            'query'=>$query
+        ]);
+    }
+
 
       /*************************/
      /* Wikipedia Webservices */
