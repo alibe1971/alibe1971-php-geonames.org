@@ -43,6 +43,16 @@ return [
         'wikiSearch'=>[         // Wiki Search
             'title'=>false,     // Title has priority
             'query'=>false,     // General search
+        ],
+
+        'address'=>[            // Address Search
+            'query'=>false,     // General search
+            'country'=>false,   // The country code
+            'postalCode'=>false,
+            'adminCode1'=>false,
+            'adminCode2'=>false,
+            'adminCode3'=>false,
+            'isUniqueStreetName'=>false
         ]
     ]
 
