@@ -241,6 +241,23 @@ class geonames {
         ]);
     }
 
+    public function findNearestIntersectionOSM() {
+        return $this->execByPosition('findNearestIntersectionOSM',[
+            'maxRows'=>$this->conn['settings']['maxRows'],
+            'includeGeoName'=>$this->conn['settings']['includeGeoName'],
+        ]);
+    }
+    public function findNearbyStreetsOSM() {
+        return $this->execByPosition('findNearbyStreetsOSM',[
+            'maxRows'=>$this->conn['settings']['maxRows'],
+        ]);
+    }
+    public function findNearbyPOIsOSM() {
+        return $this->execByPosition('findNearbyPOIsOSM',[
+            'maxRows'=>$this->conn['settings']['maxRows'],
+        ]);
+    }
+
 
       /*************************/
      /* Wikipedia Webservices */
