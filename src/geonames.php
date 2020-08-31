@@ -334,6 +334,15 @@ class geonames {
         ]);
     }
 
+      /***********************/
+     /* Address Webservices */
+    /***********************/
+    public function address() {
+        return $this->execByPosition('address',[
+            'maxRows'=>$this->conn['settings']['maxRows'],
+        ]);
+    }
+
       /*************************/
      /* Execute by position   */
     /*************************/
