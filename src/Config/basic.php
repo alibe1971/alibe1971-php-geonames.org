@@ -49,10 +49,10 @@ return [
             'query'=>false,     // General search
             'country'=>false,   // The country code
             'postalCode'=>false,
-            'adminCode1'=>false,
+            'adminCode1'=>false,    // Administrative code
             'adminCode2'=>false,
             'adminCode3'=>false,
-            'isUniqueStreetName'=>false
+            'isUniqueStreetName'=>false // Duplicate name are avoided
         ]
     ]
 

@@ -352,6 +352,20 @@ class geonames {
             ]
         ]);
     }
+    public function streetNameLookup() {
+        return $this->exe->get([
+            'cmd'=>'streetNameLookup',
+            'query'=>[
+                'q'=>rawurlencode($this->conn['settings']['address']['query']),
+                'country'=>$this->conn['settings']['address']['country'],
+                'postalcode'=>$this->conn['settings']['address']['postalCode'],
+                'adminCode1'=>$this->conn['settings']['address']['adminCode1'],
+                'adminCode2'=>$this->conn['settings']['address']['adminCode2'],
+                'adminCode3'=>$this->conn['settings']['address']['adminCode3'],
+                'isUniqueStreetName'=>$this->conn['settings']['address']['isUniqueStreetName']
+            ]
+        ]);
+    }
 
       /*************************/
      /* Execute by position   */
