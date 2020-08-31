@@ -342,6 +342,16 @@ class geonames {
             'maxRows'=>$this->conn['settings']['maxRows'],
         ]);
     }
+    public function geoCodeAddress() {
+        return $this->exe->get([
+            'cmd'=>'geoCodeAddress',
+            'query'=>[
+                'q'=>rawurlencode($this->conn['settings']['address']['query']),
+                'country'=>$this->conn['settings']['address']['country'],
+                'postalcode'=>$this->conn['settings']['address']['postalCode']
+            ]
+        ]);
+    }
 
       /*************************/
      /* Execute by position   */
