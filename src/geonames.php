@@ -333,6 +333,15 @@ class geonames {
             ]
         ]);
     }
+    public function postalCodeSearch($zip) {
+        return $this->exe->get([
+            'cmd'=>'postalCodeSearch',
+            'query'=>[
+                'postalcode'=>$zip,
+                'maxRows'=>$this->conn['settings']['maxRows'],
+            ]
+        ]);
+    }
 
       /***********************/
      /* Address Webservices */
