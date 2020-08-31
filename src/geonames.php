@@ -47,14 +47,7 @@ class geonames {
         ]);
     }
 
-    public function countryInfo($cc=false) {
-        return $this->exe->get([
-            'cmd'=>'countryInfo',
-            'query'=>[
-                'country'=>$cc
-            ]
-        ]);
-    }
+
 
       /*******************************/
      /* Place Hierarchy Webservices */
@@ -276,6 +269,34 @@ class geonames {
         ]);
     }
 
+
+      /*****************************************/
+     /* Postal code and countries Webservices */
+    /*****************************************/
+    public function countryInfo($cc=false) {
+        return $this->exe->get([
+            'cmd'=>'countryInfo',
+            'query'=>[
+                'country'=>$cc
+            ]
+        ]);
+    }
+    public function postalCodeCountryInfo() {
+        return $this->exe->get([
+            'cmd'=>'postalCodeCountryInfo'
+        ]);
+    }
+    public function postalCodeLookup($zip=false,$cc=false) {
+        return $this->exe->get([
+            'cmd'=>'postalCodeLookup',
+            'query'=>[
+                'country'=>$cc,
+                'postalcode'=>$zip,
+                'maxRows'=>$this->conn['settings']['maxRows'],
+                'charset'=>$this->conn['settings']['charset'],
+            ]
+        ]);
+    }
 
       /*************************/
      /* Execute by position   */
