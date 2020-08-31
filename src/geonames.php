@@ -222,6 +222,25 @@ class geonames {
         ]);
     }
 
+    public function findNearbyStreets() {
+        return $this->execByPosition('findNearbyStreets',[
+            'maxRows'=>$this->conn['settings']['maxRows'],
+        ]);
+    }
+
+    public function findNearestIntersection() {
+        return $this->execByPosition('findNearestIntersection',[
+            'maxRows'=>$this->conn['settings']['maxRows'],
+            'filter'=>$this->conn['settings']['filter'],
+        ]);
+    }
+
+    public function findNearestAddress() {
+        return $this->execByPosition('findNearestAddress',[
+            'maxRows'=>$this->conn['settings']['maxRows']
+        ]);
+    }
+
 
       /*************************/
      /* Wikipedia Webservices */
