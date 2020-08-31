@@ -37,6 +37,7 @@ return [
         'style'=>false,         // The verbosity
         'isReduced'=>false,     // Is reduced var
         'charset'=>false,       // The charset
+        'filter'=>false,        // Filter for the searches
 
         'wikiSearch'=>[         // Wiki Search
             'title'=>false,     // Title has priority
