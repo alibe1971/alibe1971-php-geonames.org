@@ -31,7 +31,12 @@ return [
         ],
         'maxRows'=>false,       // Max number of rows
         'date'=>'today',        // date parameter
-        'minMagnitude'=>0,      // Min mag. for earthquakes
+        'minMagnitude'=>false,  // Min mag. for earthquakes
+        'localCountry'=>false,  // Bool for local country
+        'cities'=>false,        // cities
+        'style'=>false,         // The verbosity
+        'isReduced'=>false,     // Is reduced var
+        'charset'=>false,       // The charset
 
         'wikiSearch'=>[         // Wiki Search
             'title'=>false,     // Title has priority
