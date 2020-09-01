@@ -14,10 +14,17 @@ class Exec {
     }
 
     public function get(array $par) {
+        $lang=$this->conn['settings']['lang'];
+        if(isSet($par['lang']) && $par['lang']) {
+            $lang=$par['lang'];
+            unset($par['lang']);
+        }
+        unset($par['clID']);
+
         $url=$this->conn['baseHost'].'/'.
             $par['cmd'].$this->conn['cmdSuffix'].
             '?username='.$this->conn['settings']['clID'].
-            '&lang='.$this->conn['settings']['lang'];
+            '&lang='.$lang;
 
         if(isSet($par['query'])) {
             foreach ($par['query'] as $k => $v) {
