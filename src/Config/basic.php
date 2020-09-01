@@ -23,11 +23,11 @@ return [
         ],
         'featureClass'=>false,   // Class for filters
         'featureCode'=>false,    // Code for filters
-        'geoBox'=>[
-            'N'=>false,          // North
-            'S'=>false,          // South
-            'E'=>false,          // East
-            'W'=>false,          // West
+        'geoBox'=>[              // the box
+            'north'=>false,
+            'south'=>false,
+            'east'=>false,
+            'west'=>false,
         ],
         'maxRows'=>false,       // Max number of rows
         'date'=>'today',        // date parameter
