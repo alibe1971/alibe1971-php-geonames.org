@@ -15,7 +15,7 @@ return [
     'settings'=> [
         'clID'=>'GeoNames.OrgID',
         'lang'=>'en',
-        'format'=>'array',
+        'format'=>'object',
         'position'=>[
             'lat'=>false,       // Latitude
             'lng'=>false,       // Longitude
