@@ -5,33 +5,46 @@ namespace Alibe\Geonames;
 use Alibe\Geonames\Lib\Exec;
 
 class geonames {
-
+    /** @var array Default request options */
     protected $conn;
+
+    /** @var class the execution class */
     protected $exe;
 
+    /**
+     * Constructor to get the configuration skeletron
+     * Example of call
+     *     $geo = new Alibe\Geonames\geonames();
+     *
+    */
     public function __construct() {
         $this->conn=include('Config/basic.php');
     }
 
+    /**
+     * Set the call parameters.
+     * The call settings remain for the execution of the script and they are used to create complex query to geonames.org api site.
+     *
+     *
+     * @param array $arr The array with the parameters to set
+     * Example of basic call
+     *     $geo->set([
+     *         'clID'   => 'Geonames.org Username',
+     *         'format' => 'object',
+     *         'lang' => 'en'
+     *     ]);
+     * "clID" is mandatory
+     * "format" is the format of the return for every call;
+     *          it can be "object" (deafult) or "array";
+     *          it is used for every call except for the rawCall, if that contain the parameter 'asIs' (see below)
+     * "lang" is optional; if it is present it is used by geonames.org api to translate the name of the location (where is possible)
+     *
+     * @return this object
+    */
     public function set($arr=[]) {
         $this->conn['settings']=array_replace_recursive($this->conn['settings'],$arr);
         $this->exe=new Exec($this->conn);
         return $this;
-    }
-
-
-    /*Continents*/
-    public function continensGetList() {
-        return $this->children('6295630');
-    }
-
-    /*Countries*/
-    public function countriesGetList() {
-        return $this->countryInfo();
-    }
-
-    public function countryGet($cc) {
-        return $this->countryInfo($cc);
     }
 
   /***********************************/
@@ -41,6 +54,27 @@ class geonames {
       /************/
      /* RAW CALL */
     /************/
+    /**
+     * Raw call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/ws-overview.html
+     * The call is prepared and done without any filters.
+     * From the set configuration it take the parameters "clID","format" and "lang" (if present).
+     * If the parameter "lang" is present in the call, ot use the call parameter instead of the configuration parameter.
+     *
+     * @param string $command, the main command for the api
+     * @param array $params, the array with the parameters to use for the call
+     * @param boolean $asIs, (optional, default as false) if it is set as true, the call ignore the settings format parameter and it return the raw response form the api call.
+     * Example of call (it assumes the settings is call already done)
+     *     $geo->rawCall(
+     *         'getJSON',
+     *         [
+     *            'geonameId' => 2643743,
+     *         ],
+     *         true
+     *     );
+     *
+     * @return object|array|response of the call without filters.
+    */
     public function rawCall($command,$params=[],$asIs=false) {
         $fCall='JSON';
         if(!$asIs) {
@@ -66,6 +100,22 @@ class geonames {
       /******************/
      /* Get Webservice */
     /******************/
+    /**
+     * Call to get the geonameId properties form geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#get
+     *
+     * @param integer $id, the geonameId in the database of geonames.org.
+     * Example of call (it assumes the main set is already done).
+     *     //Set the parameters (optional)
+     *     $geo->set([
+     *        'lang'=>'en',
+     *        'style'=>'full',
+     *     ]);
+     *     // Call it
+     *     $geo->get(3175395); // Example for Italy
+     *
+     * @return object|array of the call.
+    */
     public function get($id) {
         return $this->exe->get([
             'cmd'=>'get',
@@ -78,6 +128,25 @@ class geonames {
       /*********************/
      /* Search Webservice */
     /*********************/
+    /**
+     * Search call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/geonames-search.html
+     *
+     * @param array $params, the array with the parameters to use for the call.
+     * The search parameters has to be set previusly using the "set" method inside the section array 'search';
+     *
+     * Example of call (it assumes the main set is already done).
+     *     //Set the search parameters
+     *     $geo->set([
+     *        'search'=>[
+     *            'q'=>'london',
+     *        ]
+     *     ]);
+     *     // Call it
+     *     $geo->search();
+     *
+     * @return object|array of the call.
+    */
     public function search() {
         $query=$this->conn['settings']['search'];
         unset($query['type']);
@@ -90,6 +159,29 @@ class geonames {
       /***********************/
      /* rssToGeo Webservice */
     /***********************/
+    /**
+     * rssToGeo search call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/rss-to-georss-converter.html
+     *
+     * @param string $url, the url of the rss feed.
+     * The rssToGeo parameters has to be set previusly using the "set" method inside the section array 'rssToGeo';
+     *
+     * Example of call (it assumes the main set is already done).
+     *     //Set the rssToGeo parameters
+     *     $geo->set([
+     *        'rssToGeo'=>[
+     *          'feedLanguage' => false,
+     *          'type' => false,
+     *          'geoRSS' => false,
+     *          'addUngeocodedItems' => false,
+     *          'country' => false,
+     *        ]
+     *     ]);
+     *     // Call it
+     *     $geo->rssToGeo('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
+     *
+     * @return object|array of the call.
+    */
     public function rssToGeo($url) {
       $query=$this->conn['settings']['rssToGeo'];
       $query['feedUrl']=$url;
@@ -104,6 +196,23 @@ class geonames {
       /*******************************/
      /* Place Hierarchy Webservices */
     /*******************************/
+    /**
+     * Children call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/place-hierarchy.html#children
+     *
+     * @param integer $id, the geonameId in the database of geonames.org.
+     * @param string $hrk, the kind of hierarchy in the database of geonames.org.
+     *
+     * Example of call (it assumes the main set is already done).
+     *     //Set the search parameters
+     *     $geo->set([
+     *        'maxRows'=>30
+     *     ]);
+     *     // Call it
+     *     $geo->children(3175395);
+     *
+     * @return object|array of the call.
+    */
     public function children($id,$hrk=false) {
         return $this->exe->get([
             'cmd'=>'children',
@@ -114,6 +223,18 @@ class geonames {
         ]);
     }
 
+    /**
+     * Hierarchy call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/place-hierarchy.html#hierarchy
+     *
+     * @param integer $id, the geonameId in the database of geonames.org.
+     *
+     * Example of call (it assumes the main set is already done).
+     *     // Call it
+     *     $geo->hierarchy(3175395);
+     *
+     * @return object|array of the call.
+    */
     public function hierarchy($id) {
         return $this->exe->get([
             'cmd'=>'hierarchy',
@@ -123,6 +244,18 @@ class geonames {
         ]);
     }
 
+    /**
+     * Siblings call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/place-hierarchy.html#siblings
+     *
+     * @param integer $id, the geonameId in the database of geonames.org.
+     *
+     * Example of call (it assumes the main set is already done).
+     *     // Call it
+     *     $geo->siblings(3175395);
+     *
+     * @return object|array of the call.
+    */
     public function siblings($id) {
         return $this->exe->get([
             'cmd'=>'siblings',
@@ -132,6 +265,18 @@ class geonames {
         ]);
     }
 
+    /**
+     * Neighbours call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/place-hierarchy.html#neighbours
+     *
+     * @param integer|string $id, the geonameId or the countri code in the database of geonames.org.
+     *
+     * Example of call (it assumes the main set is already done).
+     *     // Call it
+     *     $geo->neighbours(3175395);
+     *
+     * @return object|array of the call.
+    */
     public function neighbours($id) {
         $query=[
             'geonameId'=>$id
@@ -147,12 +292,30 @@ class geonames {
         ]);
     }
 
+    /**
+     * Contains call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/place-hierarchy.html#contains
+     *
+     * @param integer|string $id, the geonameId or the countri code in the database of geonames.org.
+     *
+     * Example of call (it assumes the main set is already done).
+     *     //Set the filter parameters (optional)
+     *     $geo->set([
+     *        'featureClass'=>'P',
+     *        'featureCode'=>'PPLL',
+     *     ]);
+     *     // Call it
+     *     $geo->contains(6539972);
+     *
+     * @return object|array of the call.
+    */
     public function contains($id) {
-        // [TODO] feature class and/or feature code
         return $this->exe->get([
             'cmd'=>'contains',
             'query'=>[
-                'geonameId'=>$id
+                'geonameId'=>$id,
+                'featureClass'=>$this->conn['settings']['featureClass'],
+                'featureCode'=>$this->conn['settings']['featureCode'],
             ]
         ]);
     }
@@ -162,12 +325,61 @@ class geonames {
       /**********************/
      /* GeoBox Webservices */
     /**********************/
+    /**
+     * The geobox is an area where to search the data.
+     * The geobox has to be set before to call the methods that use it.
+     *     //Set the geobox
+     *     $geo->set([
+     *          'geoBox'=>[
+     *               'north'=>44.1,
+     *               'south'=>-9.9,
+     *               'east'=>22.4,
+     *               'west'=>55.2,
+     *          ]
+     *     ]);
+    */
+
+    /**
+     * Cities inside Geobox call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/JSON-webservices.html
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     GEOBOX parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'lang'=>'en',     // (if it isn't already set)
+     *        'maxRows'=>200,   // (if it isn't already set)
+     *     ]);
+     *     // Call it
+     *     $geo->cities();
+     *
+     * @return object|array of the call.
+    */
     public function cities() {
         return $this->execByGeoBox('cities',[
             'maxRows'=>$this->conn['settings']['maxRows']
         ]);
     }
 
+    /**
+     * Earthquakes inside Geobox call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/JSON-webservices.html#earthquakesJSON
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     GEOBOX parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'maxRows'=>200,   // (if it isn't already set)
+     *        'date'=>'today',  // (optional, filter the event before the date ,'Y-m-d' format, default 'today')
+     *        'minMagnitude'=>'2.4',  // (optional, filter the event with magnitude greather than)
+     *     ]);
+     *     // Call it
+     *     $geo->earthquakes();
+     *
+     * @return object|array of the call.
+    */
     public function earthquakes() {
         return $this->execByGeoBox('earthquakes',[
             'maxRows'=>$this->conn['settings']['maxRows'],
@@ -177,72 +389,78 @@ class geonames {
     }
 
 
-      /***********************/
-     /* Weather Webservices */
-    /***********************/
-    public function weather() {
-        return $this->execByGeoBox('weather',[
-            'maxRows'=>$this->conn['settings']['maxRows']
-        ]);
-    }
-    public function weatherIcao($id) {
-        return $this->exe->get([
-            'cmd'=>'weatherIcao',
-            'query'=>[
-                'ICAO'=>$id
-            ]
-        ]);
-    }
-
-    public function findNearByWeather() {
-        return $this->execByPosition('findNearByWeather');
-    }
-
-      /*************************/
-     /* Altitude Webservices  */
-    /*************************/
-    public function srtm1() {
-        return $this->execByPosition('srtm1');
-    }
-    public function srtm3() {
-        return $this->execByPosition('srtm3');
-    }
-    public function astergdem() {
-        return $this->execByPosition('astergdem');
-    }
-    public function gtopo30() {
-        return $this->execByPosition('gtopo30');
-    }
-
       /*************************/
      /* Position Webservices  */
     /*************************/
+    /**
+     * The position settings is contains the coordinates for the position and the radius (in Km) where to search the data.
+     * The position has to be set before to call the methods that use it.
+     *     //Set the position
+     *     $geo->set([
+     *          'position'=>[
+     *               'lat'=>40.78343,
+     *               'lng'=>-73.96625,
+     *               'radius'=>1
+     *          ]
+     *     ]);
+    */
+
+    /**
+     * CountryCode from Position call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#countrycode
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'lang'=>'en',   // (if it isn't already set)
+     *     ]);
+     *     // Call it
+     *     $geo->countryCode();
+     *
+     * @return object|array of the call.
+    */
     public function countryCode() {
         return $this->execByPosition('countryCode');
     }
+
+
     public function ocean() {
         return $this->execByPosition('ocean');
     }
+
+
     public function timezone() {
         return $this->execByPosition('timezone',[
             'date'=>date('Y-m-d',strtotime($this->conn['settings']['date'])),
         ]);
     }
+
+
     public function neighbourhood() {
         return $this->execByPosition('neighbourhood');
     }
+
+
     public function countrySubdivision() {
         return $this->execByPosition('countrySubdivision');
     }
+
+
     public function findNearby() {
         return $this->execByPosition('findNearby',[
             'featureClass'=>$this->conn['settings']['featureClass'],
             'featureCode'=>$this->conn['settings']['featureCode'],
         ]);
     }
+
+
     public function extendedFindNearby() {
         return $this->execByPosition('extendedFindNearby');
     }
+
+
     public function findNearbyPlaceName() {
         return $this->execByPosition('findNearbyPlaceName',[
             'localCountry'=>$this->conn['settings']['localCountry'],
@@ -250,6 +468,8 @@ class geonames {
             'style'=>$this->conn['settings']['style'],
         ]);
     }
+
+
     public function findNearbyPostalCodes($cc=false,$zip=false) {
         if($cc && $zip) {
             $query=[
@@ -299,15 +519,96 @@ class geonames {
             'includeGeoName'=>$this->conn['settings']['includeGeoName'],
         ]);
     }
+
     public function findNearbyStreetsOSM() {
         return $this->execByPosition('findNearbyStreetsOSM',[
             'maxRows'=>$this->conn['settings']['maxRows'],
         ]);
     }
+
     public function findNearbyPOIsOSM() {
         return $this->execByPosition('findNearbyPOIsOSM',[
             'maxRows'=>$this->conn['settings']['maxRows'],
         ]);
+    }
+
+
+      /***********************/
+     /* Weather Webservices */
+    /***********************/
+    /**
+     * Weather station inside Geobox call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/JSON-webservices.html#weatherJSON
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     GEOBOX parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'maxRows'=>200,   // (if it isn't already set)
+     *     ]);
+     *     // Call it
+     *     $geo->weather();
+     *
+     * @return object|array of the call.
+    */
+    public function weather() {
+        return $this->execByGeoBox('weather',[
+            'maxRows'=>$this->conn['settings']['maxRows']
+        ]);
+    }
+
+    /**
+     * weatherIcao. Call to get the weather station with ICAO code.
+     * Geonames.org documentation: https://www.geonames.org/export/JSON-webservices.html#weatherIcaoJSON
+     *
+     * @param string $icaoCode, the ICAO (International Civil Aviation Organization) code.
+     * Example of call (it assumes the main set is already done).
+     *     // Call it
+     *     $geo->weatherIcao('EICK'); // Example for Cork
+     *
+     * @return object|array of the call.
+    */
+    public function weatherIcao($icaoCode) {
+        return $this->exe->get([
+            'cmd'=>'weatherIcao',
+            'query'=>[
+                'ICAO'=>$icaoCode
+            ]
+        ]);
+    }
+
+    /**
+     * findNearByWeather from Position call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/JSON-webservices.html#findNearByWeatherJSON
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     // Call it
+     *     $geo->findNearByWeather();
+     *
+     * @return object|array of the call.
+    */
+    public function findNearByWeather() {
+        return $this->execByPosition('findNearByWeather');
+    }
+
+
+      /*************************/
+     /* Altitude Webservices  */
+    /*************************/
+    public function srtm1() {
+        return $this->execByPosition('srtm1');
+    }
+    public function srtm3() {
+        return $this->execByPosition('srtm3');
+    }
+    public function astergdem() {
+        return $this->execByPosition('astergdem');
+    }
+    public function gtopo30() {
+        return $this->execByPosition('gtopo30');
     }
 
 
@@ -444,17 +745,26 @@ class geonames {
     /***********************/
     public function execByGeoBox($cmd, $ar=[]) {
         $box=$this->conn['settings']['geoBox'];
-        $box=[
-            'north'=>$box['N'],
-            'south'=>$box['S'],
-            'east'=>$box['E'],
-            'west'=>$box['W'],
-        ];
         $query=array_merge($box,$ar);
         return $this->exe->get([
             'cmd'=>$cmd,
             'query'=>$query
         ]);
+    }
+
+
+    /*Continents*/
+    public function continensGetList() {
+        return $this->children('6295630');
+    }
+
+    /*Countries*/
+    public function countriesGetList() {
+        return $this->countryInfo();
+    }
+
+    public function countryGet($cc) {
+        return $this->countryInfo($cc);
     }
 
 }
