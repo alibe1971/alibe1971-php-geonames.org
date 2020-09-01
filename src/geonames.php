@@ -628,12 +628,45 @@ class geonames {
         ]);
     }
 
+
+    /**
+     * FindNearbyStreets from Position call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/maps/us-reverse-geocoder.html#findNearbyStreets
+     *
+     * RESTRICTION: US LOCATION ONLY
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'maxRows'=>'en',   // (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->findNearbyStreets();
+     *
+     * @return object|array of the call.
+    */
     public function findNearbyStreets() {
         return $this->execByPosition('findNearbyStreets',[
             'maxRows'=>$this->conn['settings']['maxRows'],
         ]);
     }
 
+    /**
+     * FindNearestIntersection from Position call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/maps/us-reverse-geocoder.html#findNearestIntersection
+     *
+     * RESTRICTION: US LOCATION ONLY
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'maxRows'=>10,   // (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->findNearestIntersection();
+     *
+     * @return object|array of the call.
+    */
     public function findNearestIntersection() {
         return $this->execByPosition('findNearestIntersection',[
             'maxRows'=>$this->conn['settings']['maxRows'],
@@ -641,12 +674,44 @@ class geonames {
         ]);
     }
 
+    /**
+     * FindNearestAddress from Position call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/maps/us-reverse-geocoder.html#findNearestAddress
+     *
+     * RESTRICTION: US LOCATION ONLY
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'maxRows'=>10,   // (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->findNearestAddress();
+     *
+     * @return object|array of the call.
+    */
     public function findNearestAddress() {
         return $this->execByPosition('findNearestAddress',[
             'maxRows'=>$this->conn['settings']['maxRows']
         ]);
     }
 
+    /**
+     * FindNearestIntersectionOSM from Position call to geonames.org using Open Street Map.
+     * Geonames.org documentation: https://www.geonames.org/maps/osm-reverse-geocoder.html#findNearestIntersectionOSM
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'maxRows'=>10,   // (optional)
+     *        'includeGeoName'=> true // (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->findNearestIntersectionOSM();
+     *
+     * @return object|array of the call.
+    */
     public function findNearestIntersectionOSM() {
         return $this->execByPosition('findNearestIntersectionOSM',[
             'maxRows'=>$this->conn['settings']['maxRows'],
@@ -654,12 +719,43 @@ class geonames {
         ]);
     }
 
+    /**
+     * FindNearbyStreetsOSM from Position call to geonames.org using Open Street Map.
+     * Geonames.org documentation: https://www.geonames.org/maps/osm-reverse-geocoder.html#findNearbyStreetsOSM
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'maxRows'=>10,   // (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->findNearbyStreetsOSM();
+     *
+     * @return object|array of the call.
+    */
     public function findNearbyStreetsOSM() {
         return $this->execByPosition('findNearbyStreetsOSM',[
             'maxRows'=>$this->conn['settings']['maxRows'],
         ]);
     }
 
+    /**
+     * FindNearbyPOIsOSM from Position call to geonames.org using Open Street Map.
+     * The point of interest.
+     * Geonames.org documentation: https://www.geonames.org/maps/osm-reverse-geocoder.html#findNearbyPOIsOSM
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'maxRows'=>10,   // (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->findNearbyPOIsOSM();
+     *
+     * @return object|array of the call.
+    */
     public function findNearbyPOIsOSM() {
         return $this->execByPosition('findNearbyPOIsOSM',[
             'maxRows'=>$this->conn['settings']['maxRows'],
@@ -732,15 +828,66 @@ class geonames {
       /*************************/
      /* Altitude Webservices  */
     /*************************/
+    /**
+     * Altitude from Position call to geonames.org using srtm1 method.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#srtm1
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     // Call it
+     *     $geo->srtm1();
+     *
+     * @return object|array of the call.
+    */
     public function srtm1() {
         return $this->execByPosition('srtm1');
     }
+
+    /**
+     * Altitude from Position call to geonames.org using srtm3 method.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#srtm3
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     // Call it
+     *     $geo->srtm3();
+     *
+     * @return object|array of the call.
+    */
     public function srtm3() {
         return $this->execByPosition('srtm3');
     }
+
+    /**
+     * Altitude from Position call to geonames.org using astergdem method.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#astergdem
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     // Call it
+     *     $geo->astergdem();
+     *
+     * @return object|array of the call.
+    */
     public function astergdem() {
         return $this->execByPosition('astergdem');
     }
+
+    /**
+     * Altitude from Position call to geonames.org using gtopo30 method.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#gtopo30
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     // Call it
+     *     $geo->gtopo30();
+     *
+     * @return object|array of the call.
+    */
     public function gtopo30() {
         return $this->execByPosition('gtopo30');
     }
