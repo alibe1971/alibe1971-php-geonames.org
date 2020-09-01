@@ -18,7 +18,8 @@
     "require": {
         "php": ">=5.5",
         "guzzlehttp/guzzle": "^6.5",
-        "dg/rss-php": "^1.4"
+        "dg/rss-php": "^1.4",
+        "adbario/php-dot-notation": "^2.2"
     },
     "autoload": {
         "psr-4": {"Alibe\\PhpGeonamesorg\\": "src/"}
