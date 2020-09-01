@@ -29,12 +29,21 @@ class Exec {
                 $url.='&'.$k.'='.$v;
             }
         }
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
         curl_close($ch);
+
+        if(isSet($par['asIs']) && $par['asIs']) {
+            return $response;
+        }
+
+        if(isSet($par['preOutput'])) {
+            $cmd=$par['preOutput'];
+            $response=$this->$cmd($response);
+        }
+
         return $this->output($response, $this->conn['settings']['format']);
     }
 
@@ -52,6 +61,11 @@ class Exec {
             default:
                 return $res;
         }
+    }
+
+    protected function rssConvert($res) {
+        $xml = simplexml_load_string($res);
+        return json_encode($xml);
     }
 
 
