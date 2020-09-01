@@ -86,6 +86,13 @@ return [
             'south' => false,
             'searchlang' => false,
             'orderby' => false,
+        ],
+        'rssToGeo'=>[
+            'feedLanguage' => false,
+            'type' => false,
+            'geoRSS' => false,
+            'addUngeocodedItems' => false,
+            'country' => false,
         ]
     ]
 
