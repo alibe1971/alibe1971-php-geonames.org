@@ -348,8 +348,8 @@ class geonames {
      *     GEOBOX parameters already set
      *     //Set the filter parameters
      *     $geo->set([
-     *        'lang'=>'en',     // (if it isn't already set)
-     *        'maxRows'=>200,   // (if it isn't already set)
+     *        'lang'=>'en',     // (optional)
+     *        'maxRows'=>200,   // (optional)
      *     ]);
      *     // Call it
      *     $geo->cities();
@@ -371,7 +371,7 @@ class geonames {
      *     GEOBOX parameters already set
      *     //Set the filter parameters
      *     $geo->set([
-     *        'maxRows'=>200,   // (if it isn't already set)
+     *        'maxRows'=>200,   // (optional)
      *        'date'=>'today',  // (optional, filter the event before the date ,'Y-m-d' format, default 'today')
      *        'minMagnitude'=>'2.4',  // (optional, filter the event with magnitude greather than)
      *     ]);
@@ -414,7 +414,7 @@ class geonames {
      *     POSITION parameters already set
      *     //Set the filter parameters
      *     $geo->set([
-     *        'lang'=>'en',   // (if it isn't already set)
+     *        'lang'=>'en',   // (optional)
      *     ]);
      *     // Call it
      *     $geo->countryCode();
@@ -425,7 +425,6 @@ class geonames {
         return $this->execByPosition('countryCode');
     }
 
-<<<<<<< HEAD
     /**
      * ocean from Position call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#ocean
@@ -438,15 +437,11 @@ class geonames {
      *
      * @return object|array of the call.
     */
-=======
-
->>>>>>> 10b5253c591ebeaaf9577fa1c23026d28479ed76
     public function ocean() {
         return $this->execByPosition('ocean');
     }
 
 
-<<<<<<< HEAD
     /**
      * Timezone from Position call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#timezone
@@ -456,7 +451,7 @@ class geonames {
      *     POSITION parameters already set
      *     //Set the filter parameters
      *     $geo->set([
-     *        'lang'=>'en',   // (if it isn't already set)
+     *        'lang'=>'en',   // (optional)
      *        'date'=>'today',  // (optional, filter the event before the date ,'Y-m-d' format, default 'today')
      *     ]);
      *     // Call it
@@ -464,15 +459,12 @@ class geonames {
      *
      * @return object|array of the call.
     */
-=======
->>>>>>> 10b5253c591ebeaaf9577fa1c23026d28479ed76
     public function timezone() {
         return $this->execByPosition('timezone',[
             'date'=>date('Y-m-d',strtotime($this->conn['settings']['date'])),
         ]);
     }
 
-<<<<<<< HEAD
     /**
      * Neighbourhood from Position call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#neighbourhood
@@ -485,15 +477,11 @@ class geonames {
      *
      * @return object|array of the call.
     */
-=======
-
->>>>>>> 10b5253c591ebeaaf9577fa1c23026d28479ed76
     public function neighbourhood() {
         return $this->execByPosition('neighbourhood');
     }
 
 
-<<<<<<< HEAD
     /**
      * CountrySubdivision from Position call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#countrysubdiv
@@ -503,20 +491,17 @@ class geonames {
      *     POSITION parameters already set
      *     //Set the filter parameters
      *     $geo->set([
-     *        'lang'=>'en',   // (if it isn't already set)
+     *        'lang'=>'en',   // (optional)
      *     ]);
      *     // Call it
      *     $geo->countrySubdivision();
      *
      * @return object|array of the call.
     */
-=======
->>>>>>> 10b5253c591ebeaaf9577fa1c23026d28479ed76
     public function countrySubdivision() {
         return $this->execByPosition('countrySubdivision');
     }
 
-<<<<<<< HEAD
     /**
      * FindNearby from Position call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#findNearby
@@ -533,9 +518,6 @@ class geonames {
      *
      * @return object|array of the call.
     */
-=======
-
->>>>>>> 10b5253c591ebeaaf9577fa1c23026d28479ed76
     public function findNearby() {
         return $this->execByPosition('findNearby',[
             'featureClass'=>$this->conn['settings']['featureClass'],
@@ -543,7 +525,6 @@ class geonames {
         ]);
     }
 
-<<<<<<< HEAD
     /**
      * ExtendedFindNearby from Position call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#extendedFindNearby
@@ -555,14 +536,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-=======
-
->>>>>>> 10b5253c591ebeaaf9577fa1c23026d28479ed76
     public function extendedFindNearby() {
         return $this->execByPosition('extendedFindNearby');
     }
 
-<<<<<<< HEAD
     /**
      * FindNearbyPlaceName from Position call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#findNearbyPlaceName
@@ -571,7 +548,7 @@ class geonames {
      *     POSITION parameters already set
      *     //Set the filter parameters
      *     $geo->set([
-     *        'lang'=>'en',   // (if it isn't already set)
+     *        'lang'=>'en',   // (optional)
      *        'localCountry'=>true,
      *        'cities'=>'cities5000',
      *        'style'=>'FULL',
@@ -581,9 +558,6 @@ class geonames {
      *
      * @return object|array of the call.
     */
-=======
-
->>>>>>> 10b5253c591ebeaaf9577fa1c23026d28479ed76
     public function findNearbyPlaceName() {
         return $this->execByPosition('findNearbyPlaceName',[
             'localCountry'=>$this->conn['settings']['localCountry'],
@@ -593,7 +567,6 @@ class geonames {
     }
 
 
-<<<<<<< HEAD
     /**
      * FindNearbyPlaceName from Position call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#findNearbyPlaceName
@@ -631,8 +604,6 @@ class geonames {
      *
      * @return object|array of the call.
     */
-=======
->>>>>>> 10b5253c591ebeaaf9577fa1c23026d28479ed76
     public function findNearbyPostalCodes($cc=false,$zip=false) {
         if($cc && $zip) {
             $query=[
@@ -708,7 +679,7 @@ class geonames {
      *     GEOBOX parameters already set
      *     //Set the filter parameters
      *     $geo->set([
-     *        'maxRows'=>200,   // (if it isn't already set)
+     *        'maxRows'=>200,   // (optional)
      *     ]);
      *     // Call it
      *     $geo->weather();
