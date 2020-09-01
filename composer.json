@@ -17,7 +17,8 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.5",
-        "guzzlehttp/guzzle": "^6.5"
+        "guzzlehttp/guzzle": "^6.5",
+        "dg/rss-php": "^1.4"
     },
     "autoload": {
         "psr-4": {"Alibe\\PhpGeonamesorg\\": "src/"}
