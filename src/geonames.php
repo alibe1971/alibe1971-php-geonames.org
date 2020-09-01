@@ -38,6 +38,20 @@ class geonames {
  /* Geonames.org Original functions */
 /***********************************/
 
+      /************/
+     /* RAW CALL */
+    /************/
+    public function rawCall($command,$params=[]) {
+        unset($params['type']);
+        return $this->exe->get([
+            'cmd'=>$command,
+            'query'=>$params
+        ]);
+    }
+
+      /******************/
+     /* Get Webservice */
+    /******************/
     public function get($id) {
         return $this->exe->get([
             'cmd'=>'get',
@@ -47,6 +61,17 @@ class geonames {
         ]);
     }
 
+      /*********************/
+     /* Search Webservice */
+    /*********************/
+    public function search() {
+        $query=$this->conn['settings']['search'];
+        unset($query['type']);
+        return $this->exe->get([
+            'cmd'=>'search',
+            'query'=>$query
+        ]);
+    }
 
 
       /*******************************/
