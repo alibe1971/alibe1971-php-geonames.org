@@ -8,12 +8,9 @@ class Exec {
     public function __construct($conn) {
         $this->conn=$conn;
         $this->conn['baseHost']=rtrim($this->conn['baseHost'],'/');
-        $this->conn['cmdSuffix']=$this->getSuffix(
-            mb_strtolower($conn['settings']['format'])
-        );
     }
 
-    public function get(array $par) {
+    public function get(array $par, $fCall='JSON') {
         $lang=$this->conn['settings']['lang'];
         if(isSet($par['lang']) && $par['lang']) {
             $lang=$par['lang'];
@@ -22,7 +19,7 @@ class Exec {
         unset($par['clID']);
 
         $url=$this->conn['baseHost'].'/'.
-            $par['cmd'].$this->conn['cmdSuffix'].
+            $par['cmd'].$fCall.
             '?username='.$this->conn['settings']['clID'].
             '&lang='.$lang;
 
@@ -42,49 +39,20 @@ class Exec {
     }
 
     protected function output($res,$format) {
-        if(!is_array($res)) {
-            switch($format) {
-                case 'array':
-                    return (array) json_decode($res, true);
-                break;
-
-                case 'object':
-                    return (object) json_decode($res);
-                break;
-
-                default:
-                    return $res;
-            }
-        }
-
+        $format=mb_strtolower($format);
         switch($format) {
             case 'array':
-                return $res;
+                return (array) json_decode($res, true);
             break;
 
             case 'object':
-                return (object) $res;
-            break;
-
-            case 'json':
-                return json_encode($res);
+                return (object) json_decode($res);
             break;
 
             default:
-                return $response;
-        }
-
-    }
-
-    protected function getSuffix($format) {
-        $suffix=[
-            'array'=>'JSON',
-            'object'=>'JSON',
-            'json'=>'JSON',
-            'xml'=>''
-        ];
-        if(isSet($suffix[$format])) {
-            return $suffix[$format];
+                return $res;
         }
     }
+
+
 }
