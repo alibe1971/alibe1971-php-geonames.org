@@ -295,8 +295,8 @@ class geonames {
             $search=$this->conn['settings']['wikiSearch'];
             if(isSet($search['title']) && $search['title']) {
                 $query['title']=$search['title'];
-            } elseif (isSet($search['query']) && $search['query']) {
-                $query['q']=rawurlencode(utf8_encode($search['query']));
+            } elseif (isSet($search['q']) && $search['q']) {
+                $query['q']=rawurlencode(utf8_encode($search['q']));
             }
         }
         return $this->exe->get([
@@ -355,7 +355,7 @@ class geonames {
         return $this->exe->get([
             'cmd'=>'geoCodeAddress',
             'query'=>[
-                'q'=>rawurlencode($this->conn['settings']['address']['query']),
+                'q'=>rawurlencode($this->conn['settings']['address']['q']),
                 'country'=>$this->conn['settings']['address']['country'],
                 'postalcode'=>$this->conn['settings']['address']['postalCode']
             ]
@@ -365,7 +365,7 @@ class geonames {
         return $this->exe->get([
             'cmd'=>'streetNameLookup',
             'query'=>[
-                'q'=>rawurlencode($this->conn['settings']['address']['query']),
+                'q'=>rawurlencode($this->conn['settings']['address']['q']),
                 'country'=>$this->conn['settings']['address']['country'],
                 'postalcode'=>$this->conn['settings']['address']['postalCode'],
                 'adminCode1'=>$this->conn['settings']['address']['adminCode1'],

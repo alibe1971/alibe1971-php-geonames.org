@@ -8,7 +8,9 @@ class Exec {
     public function __construct($conn) {
         $this->conn=$conn;
         $this->conn['baseHost']=rtrim($this->conn['baseHost'],'/');
-        $this->conn['cmdSuffix']=$this->getSuffix(mb_strtolower($conn['settings']['format']));
+        $this->conn['cmdSuffix']=$this->getSuffix(
+            mb_strtolower($conn['settings']['format'])
+        );
     }
 
     public function get(array $par) {
