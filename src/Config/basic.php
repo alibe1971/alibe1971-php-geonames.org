@@ -42,17 +42,50 @@ return [
 
         'wikiSearch'=>[         // Wiki Search
             'title'=>false,     // Title has priority
-            'query'=>false,     // General search
+            '// QUESTION: '=>false,     // General search
         ],
 
         'address'=>[            // Address Search
-            'query'=>false,     // General search
+            'q'=>false,     // General search
             'country'=>false,   // The country code
             'postalCode'=>false,
             'adminCode1'=>false,    // Administrative code
             'adminCode2'=>false,
             'adminCode3'=>false,
             'isUniqueStreetName'=>false // Duplicate name are avoided
+        ],
+        'search'=>[
+            'q' => false,
+            'name' => false,
+            'name_equals' => false,
+            'name_startsWith' => false,
+            'maxRows' => false,
+            'startRow' => false,
+            'country' => false,
+            'countryBias' => false,
+            'continentCode' => false,
+            'adminCode1' => false,
+            'adminCode2' => false,
+            'adminCode3' => false,
+            'adminCode4' => false,
+            'adminCode5' => false,
+            'featureClass' => false,
+            'featureCode' => false,
+            'cities' => false,
+            'lang' => false,
+            'type' => false,
+            'style' => false,
+            'isNameRequired' => false,
+            'tag' => false,
+            'operator' => false,
+            'charset' => false,
+            'fuzzy' => false,
+            'east' => false,
+            'west' => false,
+            'north' => false,
+            'south' => false,
+            'searchlang' => false,
+            'orderby' => false,
         ]
     ]
 
