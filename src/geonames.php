@@ -41,12 +41,26 @@ class geonames {
       /************/
      /* RAW CALL */
     /************/
-    public function rawCall($command,$params=[]) {
-        unset($params['type']);
+    public function rawCall($command,$params=[],$asIs=false) {
+        $fCall='JSON';
+        if(!$asIs) {
+            unset($params['type']);
+            $command=preg_replace('/JSON$/','',$command);
+            $command=preg_replace('/XML$/','',$command);
+            $command=preg_replace('/RDF$/','',$command);
+            $command=preg_replace('/CSV$/','',$command);
+            $command=preg_replace('/RSS$/','',$command);
+            if(preg_match('/^rssToGeo/',$command)) {
+                $fCall='RSS';
+            }
+        } else {
+            $fCall='';
+        }
         return $this->exe->get([
             'cmd'=>$command,
-            'query'=>$params
-        ]);
+            'query'=>$params,
+            'asIs'=>$asIs
+        ],$fCall);
     }
 
       /******************/
@@ -73,6 +87,19 @@ class geonames {
         ]);
     }
 
+      /***********************/
+     /* rssToGeo Webservice */
+    /***********************/
+    public function rssToGeo($url) {
+      $query=$this->conn['settings']['rssToGeo'];
+      $query['feedUrl']=$url;
+      unset($query['type']);
+      return $this->exe->get([
+          'cmd'=>'rssToGeo',
+          'query'=>$query,
+          'preOutput'=>'rssConvert'
+      ],'RSS');
+    }
 
       /*******************************/
      /* Place Hierarchy Webservices */
