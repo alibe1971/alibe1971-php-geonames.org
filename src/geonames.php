@@ -1,8 +1,8 @@
 <?php
 
-namespace Alibe\PhpGeonamesorg;
+namespace Alibe\Geonames;
 
-use Alibe\PhpGeonamesorg\Lib\Exec;
+use Alibe\Geonames\Lib\Exec;
 
 class geonames {
 

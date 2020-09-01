@@ -22,6 +22,6 @@
         "adbario/php-dot-notation": "^2.2"
     },
     "autoload": {
-        "psr-4": {"Alibe\\PhpGeonamesorg\\": "src/"}
+        "psr-4": {"Alibe\\Geonames\\": "src/"}
     }
 }

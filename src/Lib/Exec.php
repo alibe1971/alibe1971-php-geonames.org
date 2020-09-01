@@ -1,6 +1,6 @@
 <?php
 
-namespace Alibe\PhpGeonamesorg\Lib;
+namespace Alibe\Geonames\Lib;
 
 class Exec {
     protected $conn;
