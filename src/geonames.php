@@ -132,10 +132,8 @@ class geonames {
      * Search call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/geonames-search.html
      *
-     * @param array $params, the array with the parameters to use for the call.
      * The search parameters has to be set previusly using the "set" method inside the section array 'search';
-     *
-     * Example of call (it assumes the main set is already done).
+     * (See the geonames documentation)
      *     //Set the search parameters
      *     $geo->set([
      *        'search'=>[
@@ -568,8 +566,8 @@ class geonames {
 
 
     /**
-     * FindNearbyPlaceName from Position call to geonames.org.
-     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#findNearbyPlaceName
+     * findNearbyPostalCodes from Position call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#findNearbyPostalCodes
      *
      * @param string $cc, the country code.
      * @param string $zip, the postal code.
@@ -833,7 +831,7 @@ class geonames {
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#srtm1
      *
      *
-     * Example of call (it assumes the main set is already done).
+     * Example of call
      *     POSITION parameters already set
      *     // Call it
      *     $geo->srtm1();
@@ -849,7 +847,7 @@ class geonames {
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#srtm3
      *
      *
-     * Example of call (it assumes the main set is already done).
+     * Example of call
      *     POSITION parameters already set
      *     // Call it
      *     $geo->srtm3();
@@ -865,7 +863,7 @@ class geonames {
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#astergdem
      *
      *
-     * Example of call (it assumes the main set is already done).
+     * Example of call
      *     POSITION parameters already set
      *     // Call it
      *     $geo->astergdem();
@@ -881,7 +879,7 @@ class geonames {
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#gtopo30
      *
      *
-     * Example of call (it assumes the main set is already done).
+     * Example of call
      *     POSITION parameters already set
      *     // Call it
      *     $geo->gtopo30();
@@ -896,11 +894,63 @@ class geonames {
       /*************************/
      /* Wikipedia Webservices */
     /*************************/
+    /**
+     * Wikipedia itmes inside Geobox call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/wikipedia-webservice.html#wikipediaBoundingBox
+     *
+     *
+     * Example of call (it assumes the main set is already done).
+     *     GEOBOX parameters already set
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'maxRows'=>10,   // (optional)
+     *        'lang'=>'en',   // (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->wikipediaBoundingBox();
+     *
+     * @return object|array of the call.
+    */
     public function wikipediaBoundingBox() {
         return $this->execByGeoBox('wikipediaBoundingBox',[
             'maxRows'=>$this->conn['settings']['maxRows']
         ]);
     }
+
+    /**
+     * Wikipedia items from Position call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/wikipedia-webservice.html#findNearbyWikipedia
+     *
+     * @param string $cc, the country code.
+     * @param string $zip, the postal code.
+     *
+     * If Country code and postal code are set,
+     * then use them.
+     * else use the position sets and country code if it is set.
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set (if needed)
+     *
+     *     //PRESET IN CASE OF POSTAL CODE
+     *     $geo->set([
+     *        'lang'=>'en',   // (optional)
+     *        'maxRows'=>10,  // (optional)
+     *        'position'=>[
+     *              'radius'=>1 // (optional)
+     *         ]
+     *     ]);
+     *
+     *     //PRESET IN CASE OF POSITION
+     *     $geo->set([
+     *        'lang'=>'en',   // (optional)
+     *        'maxRows'=>10, // (optional)
+     *     ]);
+     *
+     *     // Call it
+     *     $geo->findNearbyWikipedia();
+     *
+     * @return object|array of the call.
+    */
     public function findNearbyWikipedia($cc=false,$zip=false) {
         if($cc && $zip) {
             $query=[
@@ -921,6 +971,38 @@ class geonames {
             'query'=>$query
         ]);
     }
+
+    /**
+     * Search call to geonames.org for Wilipedia items.
+     * Geonames.org documentation: https://www.geonames.org/export/wikipedia-webservice.html#wikipediaSearch
+     *
+     * The search parameters has to be set previusly using the "set" method inside the section array 'wikiSearch';
+     * In the wikiSearch there are two properties that are each other alternative
+     * -"title" search inside the title (preeminent)
+     * -"q" search inside the body
+     *
+     *     //Set the wikiSearch parameters
+     *     $geo->set([
+     *        'wikiSearch'=>[
+     *            'q'=>'london',
+     *        ]
+     *     ]);
+     *     OR
+     *     $geo->set([
+     *        'wikiSearch'=>[
+     *            'title'=>'london',
+     *        ]
+     *     ]);
+     *     Other parameters
+     *     $geo->set([
+     *        'lang'=>'en' (optional)
+     *        'maxRows'=>20 (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->search();
+     *
+     * @return object|array of the call.
+    */
     public function wikipediaSearch() {
         $query=[
             'maxRows'=>$this->conn['settings']['maxRows']
@@ -956,7 +1038,25 @@ class geonames {
             'cmd'=>'postalCodeCountryInfo'
         ]);
     }
-    public function postalCodeLookup($zip=false,$cc=false) {
+
+    /**
+     * Postal Code lookup call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#postalCodeLookupJSON
+     *
+     * @param string $zip, The postal code
+     * @param string $cc, The country code filter (optional)
+     * Example of call (it assumes the main set is already done).
+     *     //Set the optional parameters
+     *     $geo->set([
+     *        'maxRows'=> 20 (optional)
+     *        'charset'=> 'UTF-8' (optional default 'UTF-8')
+     *     ]);
+     *     // Call it
+     *     $geo->postalCodeLookup('T12');
+     *
+     * @return object|array of the call.
+    */
+    public function postalCodeLookup($zip,$cc=false) {
         return $this->exe->get([
             'cmd'=>'postalCodeLookup',
             'query'=>[
@@ -967,39 +1067,178 @@ class geonames {
             ]
         ]);
     }
-    public function postalCodeSearch($zip) {
+
+
+    /**
+     * Postal Code or Place search call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#postalCodeSearch
+     *
+     * @param string $req, The postal code or the place name
+     *
+     * The other search parameters has to be set previusly using the "set" method inside the section array 'postalplace';
+     *
+     * Differentemente da geonames.org la struttura della richiesta è formulata nel modo seguente:
+     * Definition of the request. Mandatory. There should be only one parameter such as 'true'; if more parameters are present as 'true', the order of prevalence follows that shown in the example.
+     *     //Set the main search parameters
+     *     $geo->set([
+     *        'postalplace' => [
+     *            'postalcode' => true,
+     *            'postalcode_startsWith' => false,
+     *            'placename' => false,
+     *            'placename_startsWith' => false,
+     *        ]
+     *     ]);
+     * Definitions of specific options (always within the 'postalplace' section). Optional.
+     *     //Set the option search parameters
+     *     $geo->set([
+     *        'postalplace' => [
+     *            'country' => 'IT',
+     *            'countryBias' => false,
+     *            'style' => 'FULL',
+     *            'operator' => 'AND',
+     *            'charset' => 'UTF-8',
+     *            'isReduced' => false,
+     *        ]
+     *     ]);
+     * Definitions of the maxRow.  Optional.
+     *     //Set the option search parameters
+     *     $geo->set([
+     *        'maxRows' => 10
+     *     ]);
+     * Definitions of the geobox.  Optional.
+     *     //Set the option search parameters
+     *     $geo->set([
+     *          'geoBox'=>[
+     *               'north'=>44.1,
+     *               'south'=>-9.9,
+     *               'east'=>22.4,
+     *               'west'=>55.2,
+     *          ]
+     *     ]);
+     *
+     *     // Call it
+     *     $geo->postalCodeSearch('05035');
+     *
+     * @return object|array of the call.
+    */
+    public function postalCodeSearch($req) {
+        $req=rawurlencode($req);
+        $query=$this->conn['settings']['geoBox'];
+        $query['maxRows']=$this->conn['settings']['maxRows'];
+        $pp=$this->conn['settings']['postalplace'];
+        if(isSet($pp['postalcode']) && $pp['postalcode']) {
+            $query['postalcode']=$req;
+        } elseif(isSet($pp['postalcode_startsWith']) && $pp['postalcode_startsWith']) {
+            $query['postalcode_startsWith']=$req;
+        } elseif(isSet($pp['placename']) && $pp['placename']) {
+            $query['placename']=$req;
+        } elseif(isSet($pp['placename_startsWith']) && $pp['placename_startsWith']) {
+            $query['placename_startsWith']=$req;
+        }
+        unset($pp['postalcode']);
+        unset($pp['postalcode_startsWith']);
+        unset($pp['placename']);
+        unset($pp['placename_startsWith']);
+        $query=array_merge($query,$pp);
         return $this->exe->get([
             'cmd'=>'postalCodeSearch',
-            'query'=>[
-                'postalcode'=>$zip,
-                'maxRows'=>$this->conn['settings']['maxRows'],
-            ]
+            'query'=>$query
         ]);
     }
 
       /***********************/
      /* Address Webservices */
     /***********************/
+    /**
+     * Address from Position call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/maps/addresses.html#address
+     *
+     * RESTRICTION: service available only for some countries
+     * (see the geonames documentation)
+     *
+     * Example of call (it assumes the main set is already done).
+     *     POSITION parameters already set
+     *     //Set the optional parameters
+     *     $geo->set([
+     *        'maxRows'=>20,   // (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->address();
+     *
+     * @return object|array of the call.
+    */
     public function address() {
         return $this->execByPosition('address',[
             'maxRows'=>$this->conn['settings']['maxRows'],
         ]);
     }
-    public function geoCodeAddress() {
+
+    /**
+     * Search address call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/maps/addresses.html#geoCodeAddress
+     *
+     * RESTRICTION: service available only for some countries
+     * (see the geonames documentation)
+     *
+     * @param string $address, The address to search.
+     * The address optional search parameters has to be set previusly using the "set" method inside the section array 'address';
+     *
+     * Example of call (it assumes the main set is already done).
+     *     //Set the search parameters
+     *     $geo->set([
+     *        'address'=>[
+     *            'country'=>'NL', (optional)
+     *            'postalCode'=>'false, (optional)
+     *        ]
+     *     ]);
+     *     // Call it
+     *     $geo->geoCodeAddress('Museumplein 6');
+     *
+     * @return object|array of the call.
+    */
+    public function geoCodeAddress($address) {
         return $this->exe->get([
             'cmd'=>'geoCodeAddress',
             'query'=>[
-                'q'=>rawurlencode($this->conn['settings']['address']['q']),
+                'q'=>rawurlencode($address),
                 'country'=>$this->conn['settings']['address']['country'],
                 'postalcode'=>$this->conn['settings']['address']['postalCode']
             ]
         ]);
     }
-    public function streetNameLookup() {
+
+    /**
+     * Search streetName call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/maps/addresses.html#streetNameLookup
+     *
+     * RESTRICTION: service available only for some countries
+     * (see the geonames documentation)
+     *
+     * @param string $address, The address to search.
+     * The address optional search parameters has to be set previusly using the "set" method inside the section array 'address';
+     *
+     * Example of call (it assumes the main set is already done).
+     *     //Set the search parameters
+     *     $geo->set([
+     *        'address'=>[
+     *            'country'=>'AU', (optional)
+     *            'postalCode'=>''6530', (optional)
+     *            'adminCode1'=>'false, (optional)
+     *            'adminCode2'=>'false, (optional)
+     *            'adminCode3'=>'false, (optional)
+     *            'isUniqueStreetName'=>'false, (optional)
+     *        ]
+     *     ]);
+     *     // Call it
+     *     $geo->streetNameLookup('Museum');
+     *
+     * @return object|array of the call.
+    */
+    public function streetNameLookup($address) {
         return $this->exe->get([
             'cmd'=>'streetNameLookup',
             'query'=>[
-                'q'=>rawurlencode($this->conn['settings']['address']['q']),
+                'q'=>rawurlencode($address),
                 'country'=>$this->conn['settings']['address']['country'],
                 'postalcode'=>$this->conn['settings']['address']['postalCode'],
                 'adminCode1'=>$this->conn['settings']['address']['adminCode1'],
