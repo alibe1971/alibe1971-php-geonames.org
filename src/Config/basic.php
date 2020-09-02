@@ -42,11 +42,10 @@ return [
 
         'wikiSearch'=>[         // Wiki Search
             'title'=>false,     // Title has priority
-            'q'=>false,     // General search
+            'q'=>false,         // General search
         ],
 
         'address'=>[            // Address Search
-            'q'=>false,     // General search
             'country'=>false,   // The country code
             'postalCode'=>false,
             'adminCode1'=>false,    // Administrative code
@@ -93,6 +92,19 @@ return [
             'geoRSS' => false,
             'addUngeocodedItems' => false,
             'country' => false,
+        ],
+        'postalplace' => [
+            'postalcode' => false,
+            'postalcode_startsWith' => false,
+            'placename' => false,
+            'placename_startsWith' => false,
+
+            'country' => false,
+            'countryBias' => false,
+            'style' => false,
+            'operator' => false,
+            'charset' => false,
+            'isReduced' => false,
         ]
     ]
 
