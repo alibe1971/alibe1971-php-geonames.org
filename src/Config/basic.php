@@ -42,7 +42,7 @@ return [
 
         'wikiSearch'=>[         // Wiki Search
             'title'=>false,     // Title has priority
-            '// QUESTION: '=>false,     // General search
+            'q'=>false,     // General search
         ],
 
         'address'=>[            // Address Search
