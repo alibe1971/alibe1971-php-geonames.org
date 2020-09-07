@@ -63,7 +63,7 @@ class Exec {
             break;
 
             default:
-                return $res;
+                throw new \Exception('Invalid format. Use "array" or "object"');
         }
     }
 
