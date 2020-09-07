@@ -65,8 +65,8 @@ class geonames {
      *
      * @param string $command, the main command for the api
      * @param array $params, the array with the parameters to use for the call
-     * @param boolean $asIs, (optional, default as false) if it is set as true, the call ignore the settings format parameter and it return the raw response form the api call.
-     * Example of call (it assumes the settings is call already done)
+     * @param string $format, (optional, default as false) if it is set as false, the call ignore the format parameter and it return the raw response form the api call; else if it is set as string, it has to be 'object' or 'array'.
+     * Example of call
      *     $geo->rawCall(
      *         'getJSON',
      *         [
@@ -77,9 +77,14 @@ class geonames {
      *
      * @return object|array|response of the call without filters.
     */
-    public function rawCall($command,$params=[],$asIs=false) {
+    public function rawCall($command,$params=[],$format=false) {
         $fCall='JSON';
-        if(!$asIs) {
+        $asIs=true;
+        if($format) {
+            $asIs=false;
+            $this->set([
+                'format'=>$format
+            ]);
             unset($params['type']);
             $command=preg_replace('/JSON$/','',$command);
             $command=preg_replace('/XML$/','',$command);
