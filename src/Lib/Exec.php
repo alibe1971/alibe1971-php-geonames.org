@@ -4,10 +4,13 @@ namespace Alibe\Geonames\Lib;
 
 class Exec {
     protected $conn;
+    protected $clid;
 
-    public function __construct($conn) {
+    public function __construct($clid,$conn) {
         $this->conn=$conn;
         $this->conn['baseHost']=rtrim($this->conn['baseHost'],'/');
+
+        $this->clid=$clid;
     }
 
     public function get(array $par, $fCall='JSON') {
@@ -17,10 +20,11 @@ class Exec {
             unset($par['lang']);
         }
         unset($par['clID']);
+        unset($par['username']);
 
         $url=$this->conn['baseHost'].'/'.
             $par['cmd'].$fCall.
-            '?username='.$this->conn['settings']['clID'].
+            '?username='.$this->clid.
             '&lang='.$lang;
 
         if(isSet($par['query'])) {

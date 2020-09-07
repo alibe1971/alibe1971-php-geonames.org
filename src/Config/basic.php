@@ -13,7 +13,6 @@ return [
 
     'baseHost'=>'http://api.geonames.org/',
     'settings'=> [
-        'clID'=>'GeoNames.OrgID',
         'lang'=>'en',
         'format'=>'object',
         'position'=>[

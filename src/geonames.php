@@ -11,14 +11,18 @@ class geonames {
     /** @var class the execution class */
     protected $exe;
 
+    /** @var string the geonames.org username */
+    protected $clID;
+
     /**
      * Constructor to get the configuration skeletron
      * Example of call
      *     $geo = new Alibe\Geonames\geonames();
      *
     */
-    public function __construct() {
+    public function __construct($clID) {
         $this->conn=include('Config/basic.php');
+        $this->clID=$clID;
     }
 
     /**
@@ -29,11 +33,9 @@ class geonames {
      * @param array $arr The array with the parameters to set
      * Example of basic call
      *     $geo->set([
-     *         'clID'   => 'Geonames.org Username',
      *         'format' => 'object',
      *         'lang' => 'en'
      *     ]);
-     * "clID" is mandatory
      * "format" is the format of the return for every call;
      *          it can be "object" (deafult) or "array";
      *          it is used for every call except for the rawCall, if that contain the parameter 'asIs' (see below)
@@ -43,7 +45,7 @@ class geonames {
     */
     public function set($arr=[]) {
         $this->conn['settings']=array_replace_recursive($this->conn['settings'],$arr);
-        $this->exe=new Exec($this->conn);
+        $this->exe=new Exec($this->clID,$this->conn);
         return $this;
     }
 
