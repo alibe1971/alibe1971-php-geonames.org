@@ -23,6 +23,7 @@ class geonames {
     public function __construct($clID) {
         $this->conn=include('Config/basic.php');
         $this->clID=$clID;
+        $this->set();
     }
 
     /**
