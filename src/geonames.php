@@ -81,8 +81,12 @@ class geonames {
     public function rawCall($command,$params=[],$format=false) {
         $fCall='JSON';
         $asIs=true;
+        $preset=$this->conn['settings']['format'];
         if($format) {
             $asIs=false;
+            if($format===true) {
+                $format=$preset;
+            }
             $this->set([
                 'format'=>$format
             ]);
@@ -98,11 +102,15 @@ class geonames {
         } else {
             $fCall='';
         }
-        return $this->exe->get([
+        $call=$this->exe->get([
             'cmd'=>$command,
             'query'=>$params,
             'asIs'=>$asIs
         ],$fCall);
+        $this->set([
+            'format'=>$preset
+        ]);
+        return $call;
     }
 
       /******************/
