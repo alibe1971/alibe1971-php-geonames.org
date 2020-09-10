@@ -7,6 +7,7 @@ use Alibe\Geonames\Lib\Exec;
 class geonames {
     /** @var array Default request options */
     protected $conn;
+    protected $defSet;
 
     /** @var class the execution class */
     protected $exe;
@@ -22,6 +23,7 @@ class geonames {
     */
     public function __construct($clID) {
         $this->conn=include('Config/basic.php');
+        $this->defSet=$this->conn['settings'];
         $this->clID=$clID;
         $this->set();
     }
@@ -45,6 +47,13 @@ class geonames {
      * @return this object
     */
     public function set($arr=[]) {
+        if(!empty($arr)) {
+            foreach ($arr as $k => $v) {
+                if($v===false || $v===null) {
+                    $arr[$k]=$this->defSet[$k];
+                }
+            }
+        }
         $this->conn['settings']=array_replace_recursive($this->conn['settings'],$arr);
         $this->exe=new Exec($this->clID,$this->conn);
         return $this;
