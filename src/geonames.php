@@ -59,6 +59,21 @@ class geonames {
         return $this;
     }
 
+    /**
+     * Reset the call parameters.
+     * It set all the parameters at the default state.
+     *
+     * Example of basic call
+     *     $geo->reset();
+     *
+     * @return this object
+    */
+    public function reset() {
+        $this->conn['settings']=$this->defSet;
+        $this->exe=new Exec($this->clID,$this->defSet);
+        return $this;
+    }
+
   /***********************************/
  /* Geonames.org Original functions */
 /***********************************/
