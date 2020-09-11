@@ -1065,6 +1065,24 @@ class geonames {
       /*****************************************/
      /* Postal code and countries Webservices */
     /*****************************************/
+    /**
+     * Country params or country list call to geonames.org.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#countryInfo
+     *
+     * @param string|array $id, the iso  ISO-3166 country code (2 letter) (optional). By default it return the list of the countries.
+     * If is present it can be a string (for a single country) or an array (for multiple countries).
+     * Example of call
+     *     //Set the optional parameters
+     *     $geo->set([
+     *        'lang'=> 'en' (optional)
+     *     ]);
+     *     // Call it
+     *     $geo->countryInfo('ie');
+     *     // Or
+     *     $geo->countryInfo(['ie','it']);
+     *
+     * @return object|array of the call.
+    */
     public function countryInfo($cc=false) {
         return $this->exe->get([
             'cmd'=>'countryInfo',
