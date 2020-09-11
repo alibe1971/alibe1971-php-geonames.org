@@ -124,4 +124,27 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('Italy',$t->name,'Not correct geonamesId');
     }
 
+    /* countryInfo Webservice */
+    public function testCountryInfo() {
+        // Test the list of the country
+        $t=$this->geo->countryInfo();
+        $c=count($t->geonames);
+        $this->assertGreaterThan(30,$c,'Is not a so big list');
+
+        // Test the single country
+        $t=$this->geo->countryInfo('ie');
+        $c=count($t->geonames);
+        $this->assertEquals(1,$c,'Is not a single country');
+        $this->assertEquals('2963597',$t->geonames[0]->geonameId,'Not correct geonamesId');
+
+        // Test the list of the country
+        $t=$this->geo->countryInfo(['ie','it']);
+        $c=count($t->geonames);
+        $this->assertEquals(2,$c,'Not correct count');
+        // Consider the return in alphabetical order
+        $this->assertEquals('2963597',$t->geonames[0]->geonameId,'Not correct geonamesId for Ireland');
+        $this->assertEquals('3175395',$t->geonames[1]->geonameId,'Not correct geonamesId for Italy');
+
+    }
+
 }
