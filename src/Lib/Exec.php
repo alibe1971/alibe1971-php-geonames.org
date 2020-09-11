@@ -30,7 +30,13 @@ class Exec {
         if(isSet($par['query'])) {
             foreach ($par['query'] as $k => $v) {
                 if(null==$v || false==$v) { continue; }
-                $url.='&'.$k.'='.$v;
+                if(is_array($v)) {
+                    foreach ($v as $ka=>$va) {
+                        $url.='&'.$k.'='.$va;
+                    }
+                } else {
+                    $url.='&'.$k.'='.$v;
+                }
             }
         }
         $ch = curl_init();
