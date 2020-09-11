@@ -96,12 +96,32 @@ final class GeonamesTest extends TestCase {
     public function testGet() {
         $t=$this->geo->get('3175395');
         $this->assertEquals('Italy',$t->name,'Not correct geonamesId');
-        // Change language
+
+        // Change language Italian
         $this->geo->set([
             'lang'=>'it'
         ]);
         $t=$this->geo->get('3175395');
         $this->assertEquals('Italia',$t->name,'Not correct geonamesId');
+
+        // Reset language
+        $this->geo->set([
+            'lang'=>false
+        ]);
+        $t=$this->geo->get('3175395');
+        $this->assertEquals('Italy',$t->name,'Not correct geonamesId');
+
+        // Change language Francese
+        $this->geo->set([
+            'lang'=>'fr'
+        ]);
+        $t=$this->geo->get('3175395');
+        $this->assertEquals('Italie',$t->name,'Not correct geonamesId');
+
+        // Reset all
+        $this->geo->reset();
+        $t=$this->geo->get('3175395');
+        $this->assertEquals('Italy',$t->name,'Not correct geonamesId');
     }
 
 }
