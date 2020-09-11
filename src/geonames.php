@@ -70,7 +70,7 @@ class geonames {
     */
     public function reset() {
         $this->conn['settings']=$this->defSet;
-        $this->exe=new Exec($this->clID,$this->defSet);
+        $this->exe=new Exec($this->clID,$this->conn);
         return $this;
     }
 
