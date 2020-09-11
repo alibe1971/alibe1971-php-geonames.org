@@ -144,7 +144,14 @@ final class GeonamesTest extends TestCase {
         // Consider the return in alphabetical order
         $this->assertEquals('2963597',$t->geonames[0]->geonameId,'Not correct geonamesId for Ireland');
         $this->assertEquals('3175395',$t->geonames[1]->geonameId,'Not correct geonamesId for Italy');
+    }
 
+    /* postalCodeCountryInfo Webservice */
+    public function postalCodeCountryInfo() {
+        // Test the list of the country where the postal code is available
+        $t=$this->geo->postalCodeCountryInfo();
+        $c=count($t->geonames);
+        $this->assertGreaterThan(30,$c,'Is not a so big list');
     }
 
 }
