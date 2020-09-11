@@ -867,67 +867,36 @@ class geonames {
      /* Altitude Webservices  */
     /*************************/
     /**
-     * Altitude from Position call to geonames.org using srtm1 method.
-     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#srtm1
+     * Altitude from Position call to geonames.org using different methods.
      *
+     * The available methods are:
+     * - srtm1 (https://www.geonames.org/export/web-services.html#srtm1)
+     * - srtm3 (https://www.geonames.org/export/web-services.html#srtm3)
+     * - astergdem (https://www.geonames.org/export/web-services.html#astergdem)
+     * - gtopo30 (https://www.geonames.org/export/web-services.html#gtopo30)
      *
+     * @param string $method, the method to use.
+     * The position variables are mandatory and they are used to locate the point where to calculate the altitude
      * Example of call
-     *     POSITION parameters already set
+     *     // Preset
+     *     $this->geo->set([
+     *         'position'=>[
+     *             'lat'=>51.8985,
+     *             'lng'=>-8.4756,
+     *             'radius'=>200,
+     *         ],
+     *     ]);
      *     // Call it
-     *     $geo->srtm1();
+     *     $geo->getAltitude('astergdem');
      *
      * @return object|array of the call.
     */
-    public function srtm1() {
-        return $this->execByPosition('srtm1');
-    }
-
-    /**
-     * Altitude from Position call to geonames.org using srtm3 method.
-     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#srtm3
-     *
-     *
-     * Example of call
-     *     POSITION parameters already set
-     *     // Call it
-     *     $geo->srtm3();
-     *
-     * @return object|array of the call.
-    */
-    public function srtm3() {
-        return $this->execByPosition('srtm3');
-    }
-
-    /**
-     * Altitude from Position call to geonames.org using astergdem method.
-     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#astergdem
-     *
-     *
-     * Example of call
-     *     POSITION parameters already set
-     *     // Call it
-     *     $geo->astergdem();
-     *
-     * @return object|array of the call.
-    */
-    public function astergdem() {
-        return $this->execByPosition('astergdem');
-    }
-
-    /**
-     * Altitude from Position call to geonames.org using gtopo30 method.
-     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#gtopo30
-     *
-     *
-     * Example of call
-     *     POSITION parameters already set
-     *     // Call it
-     *     $geo->gtopo30();
-     *
-     * @return object|array of the call.
-    */
-    public function gtopo30() {
-        return $this->execByPosition('gtopo30');
+    public function getAltitude(string $method) {
+        $m=['srtm1','srtm3','astergdem','gtopo30'];
+        if(!in_array($method,$m)) {
+            return [];
+        }
+        return $this->execByPosition($method);
     }
 
 
