@@ -1091,6 +1091,17 @@ class geonames {
             ]
         ]);
     }
+
+    /**
+     * Get the list of the country where the postal code geocoding is available.
+     * Geonames.org documentation: https://www.geonames.org/export/web-services.html#postalCodeCountryInfo
+     *
+     * Example of call
+     *     // Call it
+     *     $geo->postalCodeCountryInfo();
+     *
+     * @return object|array of the call.
+    */
     public function postalCodeCountryInfo() {
         return $this->exe->get([
             'cmd'=>'postalCodeCountryInfo'
