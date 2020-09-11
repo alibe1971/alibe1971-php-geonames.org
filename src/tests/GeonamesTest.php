@@ -147,11 +147,44 @@ final class GeonamesTest extends TestCase {
     }
 
     /* postalCodeCountryInfo Webservice */
-    public function postalCodeCountryInfo() {
+    public function testPostalCodeCountryInfo() {
         // Test the list of the country where the postal code is available
         $t=$this->geo->postalCodeCountryInfo();
         $c=count($t->geonames);
         $this->assertGreaterThan(30,$c,'Is not a so big list');
+    }
+
+    /* getAltitude Webservice */
+    public function testGetAltitude() {
+        // Set the position
+        $this->geo->set([
+            'position'=>[
+                'lat'=>51.8985,
+                'lng'=>-8.4756,
+                'radius'=>1,
+            ]
+        ]);
+        // Test a not existent method
+        $t=$this->geo->getAltitude('fake');
+        $this->assertEmpty($t,'It is not empty');
+
+        // Test srtm1
+        $t=(array) $this->geo->getAltitude('srtm1');
+        $this->assertArrayHasKey('srtm1',$t,'Key not present');
+
+        // Test srtm3
+        $t=(array) $this->geo->getAltitude('srtm3');
+        $this->assertArrayHasKey('srtm3',$t,'Key not present');
+
+        // Test astergdem
+        $t=(array) $this->geo->getAltitude('astergdem');
+        $this->assertArrayHasKey('astergdem',$t,'Key not present');
+
+        // Test gtopo30
+        $t=(array) $this->geo->getAltitude('gtopo30');
+        $this->assertArrayHasKey('gtopo30',$t,'Key not present');
+
+
     }
 
 }
