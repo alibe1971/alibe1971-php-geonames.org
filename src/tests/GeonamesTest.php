@@ -183,8 +183,53 @@ final class GeonamesTest extends TestCase {
         // Test gtopo30
         $t=(array) $this->geo->getAltitude('gtopo30');
         $this->assertArrayHasKey('gtopo30',$t,'Key not present');
+    }
 
 
+    /* countryCode Webservice */
+    public function testCountryCode() {
+        // Set the position
+        $this->geo->set([
+            'lang'=>'fr',
+            'position'=>[
+                'lat'=>51.8985,
+                'lng'=>-8.4756,
+                'radius'=>1,
+            ]
+        ]);
+        $t=(array) $this->geo->countryCode();
+        $this->assertArrayHasKey('countryCode',$t,'Key not present');
+    }
+
+    /* ocean Webservice */
+    public function testOcean() {
+        // Set the position
+        $this->geo->set([
+            'position'=>[
+                'lat'=>51.8985,
+                'lng'=>-8.4756,
+                'radius'=>50,
+            ]
+        ]);
+        $t=$this->geo->ocean();
+        $this->assertEquals('2960856',$t->ocean->geonameId,'Not correct geonamesId for Celtic See');
+    }
+
+    /* timezone Webservice */
+    public function testTimezone() {
+        // Set the position
+        $this->geo->set([
+            'lang'=>'fr',
+            'date'=>'last monday of september 2004',
+            'position'=>[
+                'lat'=>51.8985,
+                'lng'=>-8.4756,
+                'radius'=>1,
+            ]
+        ]);
+        $t=$this->geo->timezone();
+        $this->assertArrayHasKey('timezoneId',(array) $t,'Key not present');
+        $this->assertEquals('2004-09-27',$t->dates[0]->date,'Not correct geonamesId for the date');
     }
 
 }
