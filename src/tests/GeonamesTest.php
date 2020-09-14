@@ -255,4 +255,32 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('NY',$t->neighbourhood->adminCode1,'Not correct adminCode');
     }
 
+    /* countrySubdivision Webservice */
+    public function testCountrySubdivision() {
+        // Case of Object
+        $this->geo->set([
+            'lang'=>'de',
+            'position'=>[
+                'lat'=>47.3,
+                'lng'=>10.2,
+            ]
+        ]);
+        $t=$this->geo->countrySubdivision();
+        $this->assertEquals('8',$t->countrySubdivision->code,'Not correct Code');
+
+        // Case of array
+        $this->geo->set([
+            'lang'=>'de',
+            'maxRows'=>100,
+            'level'=>2,
+            'position'=>[
+                'lat'=>47.3,
+                'lng'=>10.2,
+                'radius'=>40
+            ]
+        ]);
+        $t=$this->geo->countrySubdivision();
+        $this->assertArrayHasKey('code',(array) $t->countrySubdivision[0],'Key not present');
+    }
+
 }
