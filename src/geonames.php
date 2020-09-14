@@ -227,7 +227,7 @@ class geonames {
       return $this->exe->get([
           'cmd'=>'rssToGeo',
           'query'=>$query,
-          'preOutput'=>'rssConvert'
+          'preOutput'=>'xmlConvert'
       ],'RSS');
     }
 
@@ -537,7 +537,9 @@ class geonames {
      * @return object|array of the call.
     */
     public function countrySubdivision() {
-        return $this->execByPosition('countrySubdivision');
+        return $this->execByPosition('countrySubdivision',[
+            'maxRows'=>$this->conn['settings']['maxRows']
+        ],'','xmlConvert');
     }
 
     /**
@@ -1290,12 +1292,18 @@ class geonames {
       /*************************/
      /* Execute by position   */
     /*************************/
-    public function execByPosition($cmd, $ar=[]) {
+    public function execByPosition(
+        $cmd,
+        $ar=[],
+        $fCall=false,
+        $preOutput=false
+    ) {
         $query=array_merge($this->conn['settings']['position'],$ar);
         return $this->exe->get([
             'cmd'=>$cmd,
-            'query'=>$query
-        ]);
+            'query'=>$query,
+            'preOutput'=>$preOutput
+        ],$fCall);
     }
 
       /***********************/
