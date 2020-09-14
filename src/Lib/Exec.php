@@ -14,6 +14,8 @@ class Exec {
     }
 
     public function get(array $par, $fCall='JSON') {
+        $fCall=(false!==$fCall)?$fCall:'JSON';
+
         $lang=$this->conn['settings']['lang'];
         if(isSet($par['lang']) && $par['lang']) {
             $lang=$par['lang'];
@@ -49,10 +51,11 @@ class Exec {
             return $response;
         }
 
-        if(isSet($par['preOutput'])) {
+        if(isSet($par['preOutput']) && $par['preOutput']) {
             $cmd=$par['preOutput'];
             $response=$this->$cmd($response);
         }
+
 
         return $this->output($response, $this->conn['settings']['format']);
     }
@@ -73,7 +76,7 @@ class Exec {
         }
     }
 
-    protected function rssConvert($res) {
+    protected function xmlConvert($res) {
         $xml = simplexml_load_string($res);
         return json_encode($xml);
     }
