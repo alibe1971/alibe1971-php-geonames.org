@@ -16,18 +16,24 @@ class Exec {
     public function get(array $par, $fCall='JSON') {
         $fCall=(false!==$fCall)?$fCall:'JSON';
 
-        $lang=$this->conn['settings']['lang'];
+        $lang='';
+        if(isSet($this->conn['settings']['lang']) && $this->conn['settings']['lang']) {
+            $lang=$this->conn['settings']['lang'];
+        }
         if(isSet($par['lang']) && $par['lang']) {
             $lang=$par['lang'];
             unset($par['lang']);
         }
+        if($lang!='') {
+            $lang='&lang='.$lang;
+        }
+
         unset($par['clID']);
         unset($par['username']);
 
         $url=$this->conn['baseHost'].'/'.
             $par['cmd'].$fCall.
-            '?username='.$this->clid.
-            '&lang='.$lang;
+            '?username='.$this->clid.$lang;
 
         if(isSet($par['query'])) {
             foreach ($par['query'] as $k => $v) {
