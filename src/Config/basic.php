@@ -30,6 +30,7 @@ return [
         ],
         'maxRows'=>false,       // Max number of rows
         'date'=>'today',        // date parameter
+        'level' => false,       // Administrative level
         'minMagnitude'=>false,  // Min mag. for earthquakes
         'localCountry'=>false,  // Bool for local country
         'cities'=>false,        // cities
@@ -73,7 +74,6 @@ return [
             'lang' => false,
             'type' => false,
             'style' => false,
-            'level' => false,
             'isNameRequired' => false,
             'tag' => false,
             'operator' => false,
