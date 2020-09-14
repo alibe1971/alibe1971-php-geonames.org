@@ -560,9 +560,24 @@ class geonames {
      * @return object|array of the call.
     */
     public function findNearby() {
+        $localCountry=false;
+        if(isSet($this->conn['settings']['localCountry']) && $this->conn['settings']['localCountry']) {
+            $localCountry='true';
+        }
         return $this->execByPosition('findNearby',[
+            'maxRows'=>$this->conn['settings']['maxRows'],
+
+            'style'=>$this->conn['settings']['style'],
+
+            'localCountry'=>$localCountry,
+
             'featureClass'=>$this->conn['settings']['featureClass'],
+
             'featureCode'=>$this->conn['settings']['featureCode'],
+            'EXCLUDEfeatureCode'=>$this->conn['settings']['EXCLUDEfeatureCode'],
+
+            'localCountry'=>$localCountry,
+
         ]);
     }
 
@@ -1141,7 +1156,7 @@ class geonames {
      *            'isReduced' => false,
      *        ]
      *     ]);
-     * Definitions of the maxRow.  Optional.
+     * Definitions of the maxRows.  Optional.
      *     //Set the option search parameters
      *     $geo->set([
      *        'maxRows' => 10
