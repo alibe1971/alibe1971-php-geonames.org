@@ -73,6 +73,7 @@ return [
             'lang' => false,
             'type' => false,
             'style' => false,
+            'level' => false,
             'isNameRequired' => false,
             'tag' => false,
             'operator' => false,
