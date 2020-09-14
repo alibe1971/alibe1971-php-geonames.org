@@ -232,4 +232,27 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('2004-09-27',$t->dates[0]->date,'Not correct geonamesId for the date');
     }
 
+    /* neighbourhood Webservice (US only) */
+    public function testNeighbourhood() {
+        // Set the position outside US (wrong)
+        $this->geo->set([
+            'position'=>[
+                'lat'=>51.8985,
+                'lng'=>-8.4756
+            ]
+        ]);
+        $t=$this->geo->neighbourhood();
+        $this->assertArrayHasKey('status',(array) $t,'Key not present');
+
+        // Set the position inside US (right)
+        $this->geo->set([
+            'position'=>[
+                'lat'=>40.78343,
+                'lng'=>-73.96625
+            ]
+        ]);
+        $t=$this->geo->neighbourhood();
+        $this->assertEquals('NY',$t->neighbourhood->adminCode1,'Not correct adminCode');
+    }
+
 }
