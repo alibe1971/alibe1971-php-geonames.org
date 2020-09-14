@@ -283,4 +283,22 @@ final class GeonamesTest extends TestCase {
         $this->assertArrayHasKey('code',(array) $t->countrySubdivision[0],'Key not present');
     }
 
+
+    /* findNearby Webservice */
+    public function testFindNearby() {
+        $this->geo->set([
+            'maxRows'=>100,
+            'position'=>[
+                'lat'=>47.3,
+                'lng'=>9,
+                'radius'=>200
+            ],
+            'style'=>'SHORT',
+            'featureCode'=>'ADM1',
+            'localCountry'=>true,
+        ]);
+        $t=$this->geo->findNearby();
+        $this->assertArrayHasKey('geonameId',(array) $t->geonames[0],'Key not present');
+    }
+
 }
