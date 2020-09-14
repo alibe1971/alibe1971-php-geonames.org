@@ -22,6 +22,8 @@ return [
         ],
         'featureClass'=>false,   // Class for filters
         'featureCode'=>false,    // Code for filters
+        'EXCLUDEfeatureCode'=>false,
+        'localCountry'=>false,  // Bool for local country
         'geoBox'=>[              // the box
             'north'=>false,
             'south'=>false,
@@ -32,7 +34,6 @@ return [
         'date'=>'today',        // date parameter
         'level' => false,       // Administrative level
         'minMagnitude'=>false,  // Min mag. for earthquakes
-        'localCountry'=>false,  // Bool for local country
         'cities'=>false,        // cities
         'style'=>false,         // The verbosity
         'isReduced'=>false,     // Is reduced var
