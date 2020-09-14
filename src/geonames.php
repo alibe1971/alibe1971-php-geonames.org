@@ -538,7 +538,8 @@ class geonames {
     */
     public function countrySubdivision() {
         return $this->execByPosition('countrySubdivision',[
-            'maxRows'=>$this->conn['settings']['maxRows']
+            'maxRows'=>$this->conn['settings']['maxRows'],
+            'level'=>$this->conn['settings']['level']
         ],'','xmlConvert');
     }
 
