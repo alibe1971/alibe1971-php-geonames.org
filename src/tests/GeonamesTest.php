@@ -301,4 +301,38 @@ final class GeonamesTest extends TestCase {
         $this->assertArrayHasKey('geonameId',(array) $t->geonames[0],'Key not present');
     }
 
+    /* exetendedFindNearby Webservice */
+    public function testExtendedFindNearby() {
+        // Set the position in Ireland
+        $this->geo->set([
+            'position'=>[
+                'lat'=>51.8985,
+                'lng'=>-8.4756,
+                'radius'=>1,
+            ]
+        ]);
+        $t=$this->geo->extendedFindNearby();
+        $this->assertEquals('6295630',$t->geonames[0]->geonameId,'Not correct geonamesId for Earth');
+
+        // Set the position in US
+        $this->geo->set([
+            'position'=>[
+                'lat'=>37.451,
+                'lng'=>-122.18,
+            ]
+        ]);
+        $t=$this->geo->extendedFindNearby();
+        $this->assertEquals('California',$t->address->adminName1,'Not correct address');
+
+        // Set the position in Atlantic Ocean
+        $this->geo->set([
+            'position'=>[
+                'lat'=>40.78343,
+                'lng'=>-43.96625,
+            ]
+        ]);
+        $t=$this->geo->extendedFindNearby();
+        $this->assertEquals('3411923',$t->ocean->geonameId,'Not correct geonamesId for North Atlantic Ocean');
+    }
+
 }
