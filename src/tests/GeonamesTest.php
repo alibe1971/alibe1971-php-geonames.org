@@ -335,4 +335,19 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('3411923',$t->ocean->geonameId,'Not correct geonamesId for North Atlantic Ocean');
     }
 
+
+    /* findNearbyPlaceName Webservice */
+    public function testFindNearbyPlaceName() {
+        // Set the position in Ireland
+        $this->geo->set([
+            'position'=>[
+                'lat'=>51.8985,
+                'lng'=>-8.4756,
+                'radius'=>1,
+            ]
+        ]);
+        $t=$this->geo->findNearbyPlaceName();
+        $this->assertEquals('2965140',$t->geonames[0]->geonameId,'Not correct geonamesId for Cork (Ireland)');
+    }
+
 }
