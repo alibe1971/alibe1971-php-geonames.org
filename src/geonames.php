@@ -616,6 +616,7 @@ class geonames {
     */
     public function findNearbyPlaceName() {
         return $this->execByPosition('findNearbyPlaceName',[
+            'maxRows'=>$this->conn['settings']['maxRows'],
             'localCountry'=>$this->conn['settings']['localCountry'],
             'cities'=>$this->conn['settings']['cities'],
             'style'=>$this->conn['settings']['style'],
