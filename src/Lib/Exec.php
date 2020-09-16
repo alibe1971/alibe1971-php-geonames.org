@@ -37,12 +37,22 @@ class Exec {
 
         if(isSet($par['query'])) {
             foreach ($par['query'] as $k => $v) {
-                if(null==$v || false==$v) { continue; }
+                if(null==$v || false==$v) {
+                    continue;
+                }
+
+                if(is_bool($v) && true===$v) {
+                    $v='true';
+                }
+
+
                 $oprt='=';
                 if(preg_match('/^EXCLUDE/',$k))  {
                     $oprt='!=';
                     $k=preg_replace('/^EXCLUDE/','',$k);
                 }
+
+
                 if(is_array($v)) {
                     foreach ($v as $ka=>$va) {
                         $url.='&'.$k.$oprt.$va;
