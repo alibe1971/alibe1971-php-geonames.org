@@ -407,4 +407,31 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('Lake Holm',$t->intersection->placename,'Not correct geonamesId for Lake Holm');
     }
 
+    /* findNearestAddress Webservice */
+    public function testFindNearestAddress() {
+        // Test from preset
+        $this->geo->set([
+            'position'=>[
+                'lat'=>47.3,
+                'lng'=>-122.18,
+                'radius'=>1
+            ],
+        ]);
+        $t=$this->geo->findNearestAddress();
+        $this->assertEquals('Lake Holm',$t->address->placename,'Not correct geonamesId for Lake Holm');
+
+        $t=$this->geo->findNearestAddress([
+            [
+                'lat'=>38.569594,
+                'lng'=>-121.483778,
+            ],
+            [
+                'lat'=>37.451,
+                'lng'=>-122.18,
+            ],
+        ]);
+        $this->assertEquals('Sacramento',$t->address[0]->placename,'Not correct geonamesId for Sacramento');
+        $this->assertEquals('Menlo Park',$t->address[1]->placename,'Not correct geonamesId for Menlo Park');
+    }
+
 }
