@@ -350,4 +350,61 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('2965140',$t->geonames[0]->geonameId,'Not correct geonamesId for Cork (Ireland)');
     }
 
+
+    /* findNearbyPostalCodes Webservice */
+    public function testFindNearbyPostalCodes() {
+        // Use the postal code
+        $this->geo->set([
+            'position'=>[
+                'radius'=>1,
+            ]
+        ]);
+        $t=$this->geo->findNearbyPostalCodes('pl','05091');
+        $this->assertEquals('PL',$t->postalCodes[0]->countryCode,'Not correct geonamesId for Poland');
+
+        // Use the location (Switzerland)
+        $this->geo->set([
+            'position'=>[
+                'lat'=>'46.8525538',        'lng'=>'10.4666838',
+                'radius'=>30
+            ],
+            'style'=>'short',
+            'maxRows'=>200,
+        ]);
+        $t=$this->geo->findNearbyPostalCodes();
+        $this->assertEquals('CH',$t->postalCodes[0]->countryCode,'Not correct geonamesId for Switzerland');
+
+        // Use the location (Switzerland) and filter for Italy
+        $t=$this->geo->findNearbyPostalCodes('it');
+        $this->assertEquals('IT',$t->postalCodes[0]->countryCode,'Not correct geonamesId for Italy');
+    }
+
+
+    /* findNearbyStreets Webservice */
+    public function testFindNearbyStreets() {
+        $this->geo->set([
+            'position'=>[
+                'lat'=>47.3,
+                'lng'=>-122.18,
+                'radius'=>1
+            ],
+        ]);
+        $t=$this->geo->findNearbyStreets();
+        $this->assertEquals('Lake Holm',$t->streetSegment[0]->placename,'Not correct geonamesId for Lake Holm');
+    }
+
+
+    /* findNearestIntersection Webservice */
+    public function testFindNearestIntersection() {
+        $this->geo->set([
+            'position'=>[
+                'lat'=>47.3,
+                'lng'=>-122.18,
+                'radius'=>1
+            ],
+        ]);
+        $t=$this->geo->findNearestIntersection();
+        $this->assertEquals('Lake Holm',$t->intersection->placename,'Not correct geonamesId for Lake Holm');
+    }
+
 }
