@@ -434,4 +434,20 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('Menlo Park',$t->address[1]->placename,'Not correct geonamesId for Menlo Park');
     }
 
+    /* findNearestIntersectionOSM Webservice */
+    public function testFindNearestIntersectionOSM() {
+        $this->geo->set([
+          'maxRows'=>1,
+          'includeGeoName'=>true,
+          'position'=>[
+            'lat'=>51.8985,
+            'lng'=>-8.4756,
+            'radius'=>1
+          ]
+        ]);
+        $t=$this->geo->findNearestIntersectionOSM();
+        $this->assertEquals('Grand Parade',$t->intersection->street1,'Not correct street for Grand Parade');
+        $this->assertEquals("Saint Patrick's Street",$t->intersection->street2,"Not correct street for Saint Patrick's Street");
+    }
+
 }
