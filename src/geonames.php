@@ -741,9 +741,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearestAddress() {
+    public function findNearestAddress($coords=[]) {
         return $this->execByPosition('findNearestAddress',[
-            'maxRows'=>$this->conn['settings']['maxRows']
+            'maxRows'=>$this->conn['settings']['maxRows'],
+            'coords'=>$coords
         ]);
     }
 
@@ -1310,6 +1311,22 @@ class geonames {
         $preOutput=false
     ) {
         $query=array_merge($this->conn['settings']['position'],$ar);
+
+        if(!empty($ar['coords'])) {
+            $lats='';
+            $lngs='';
+            foreach($ar['coords'] as $c) {
+                $lats.=$c['lat'].',';
+                $lngs.=$c['lng'].',';
+            }
+            $query['lats']=rtrim($lats,',');
+            $query['lngs']=rtrim($lngs,',');
+
+            unset($query['lat']);
+            unset($query['lng']);
+            unset($query['coords']);
+        }
+
         return $this->exe->get([
             'cmd'=>$cmd,
             'query'=>$query,
