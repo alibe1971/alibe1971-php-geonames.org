@@ -739,6 +739,19 @@ class geonames {
      *     // Call it
      *     $geo->findNearestAddress();
      *
+     *     // USE THE INLINE PARAMETER FOR MULTIPLE
+     *        COORDINATES
+     *     $geo->findNearestAddress([
+     *          [
+     *              'lat'=>38.569594,
+     *              'lng'=>-121.483778,
+     *          ],
+     *          [
+     *              'lat'=>37.451,
+     *              'lng'=>-122.18,
+     *          ],
+     *     ]);
+     *
      * @return object|array of the call.
     */
     public function findNearestAddress($coords=[]) {
