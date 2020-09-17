@@ -450,4 +450,18 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals("Saint Patrick's Street",$t->intersection->street2,"Not correct street for Saint Patrick's Street");
     }
 
+    /* findNearbyStreetsOSM Webservice */
+    public function testFindNearbyStreetsOSM() {
+        $this->geo->set([
+          'maxRows'=>1,
+          'position'=>[
+            'lat'=>51.8985,
+            'lng'=>-8.4756,
+            'radius'=>1
+          ]
+        ]);
+        $t=$this->geo->findNearbyStreetsOSM();
+        $this->assertEquals('40950946',$t->streetSegment->wayId,'Not correct wayId');
+    }
+
 }
