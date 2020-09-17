@@ -464,4 +464,18 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('40950946',$t->streetSegment->wayId,'Not correct wayId');
     }
 
+    /* findNearbyPOIsOSM Webservice */
+    public function testFindNearbyPOIsOSM() {
+        $this->geo->set([
+          'maxRows'=>1,
+          'position'=>[
+            'lat'=>51.8985,
+            'lng'=>-8.4756,
+            'radius'=>1
+          ]
+        ]);
+        $t=$this->geo->findNearbyPOIsOSM();
+        $this->assertEquals("McDonald's",$t->poi->name,'Not correct name');
+    }
+
 }
