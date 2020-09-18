@@ -525,4 +525,10 @@ final class GeonamesTest extends TestCase {
         $this->assertArrayHasKey('ICAO',(array) $t->weatherObservations[0],'Key not present');
     }
 
+    /* weatherIcao Webservice */
+    public function testWeatherIcao() {
+        $t=$this->geo->weatherIcao('EICK');
+        $this->assertEquals('EICK',$t->weatherObservation->ICAO,'Not correct ICAO');
+    }
+
 }
