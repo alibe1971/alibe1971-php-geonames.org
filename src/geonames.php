@@ -421,7 +421,7 @@ class geonames {
     public function earthquakes() {
         return $this->execByGeoBox('earthquakes',[
             'maxRows'=>$this->conn['settings']['maxRows'],
-            'date'=>date('Y-m-d',strtotime($this->conn['settings']['date'])),
+            'date'=>($this->conn['settings']['date'])?date('Y-m-d',strtotime($this->conn['settings']['date'])):false,
             'minMagnitude'=>$this->conn['settings']['minMagnitude'],
         ]);
     }
@@ -498,8 +498,9 @@ class geonames {
      * @return object|array of the call.
     */
     public function timezone() {
+        $date=($this->conn['settings']['date'])?$this->conn['settings']['date']:'today';
         return $this->execByPosition('timezone',[
-            'date'=>date('Y-m-d',strtotime($this->conn['settings']['date'])),
+            'date'=>date('Y-m-d',strtotime($date)),
         ]);
     }
 

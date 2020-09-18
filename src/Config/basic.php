@@ -31,7 +31,7 @@ return [
             'west'=>false,
         ],
         'maxRows'=>false,       // Max number of rows
-        'date'=>'today',        // date parameter
+        'date'=>false,        // date parameter
         'level' => false,       // Administrative level
         'minMagnitude'=>false,  // Min mag. for earthquakes
         'cities'=>false,        // cities
