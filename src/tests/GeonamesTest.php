@@ -531,4 +531,17 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('EICK',$t->weatherObservation->ICAO,'Not correct ICAO');
     }
 
+    /* findNearByWeather Webservice */
+    public function testFindNearByWeather() {
+        $this->geo->set([
+          'position'=>[
+            'lat'=>51.8985,
+            'lng'=>-8.4756,
+            'radius'=>200
+          ]
+        ]);
+        $t=$this->geo->findNearByWeather();
+        $this->assertEquals('EICK',$t->weatherObservation->ICAO,'Not correct ICAO');
+    }
+
 }
