@@ -478,7 +478,7 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals("McDonald's",$t->poi->name,'Not correct name');
     }
 
-    /* Cities Webservice */
+    /* cities Webservice */
     public function testCities() {
         $this->geo->set([
             'maxRows'=>1,
@@ -491,6 +491,22 @@ final class GeonamesTest extends TestCase {
         ]);
         $t=$this->geo->cities();
         $this->assertEquals('360630',$t->geonames[0]->geonameId,'Not correct geonamesId');
+    }
+
+
+    /* earthquakes Webservice */
+    public function testEarthquakes() {
+        $this->geo->set([
+            'minMagnitude'=>7,
+            'geoBox'=>[
+                'north'=>44.1,
+                'south'=>-9.9,
+                'east'=>55.2,
+                'west'=>22.4,
+            ]
+        ]);
+        $t=$this->geo->earthquakes();
+        $this->assertEquals('7.2',$t->earthquakes[0]->magnitude,'Not correct magnitude');
     }
 
 }
