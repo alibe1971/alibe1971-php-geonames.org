@@ -860,6 +860,10 @@ class geonames {
      *
      * @param string $icaoCode, the ICAO (International Civil Aviation Organization) code.
      * Example of call (it assumes the main set is already done).
+     *     //Set the filter parameters
+     *     $geo->set([
+     *        'lang'=>'en',   // (optional)
+     *     ]);
      *     // Call it
      *     $geo->weatherIcao('EICK'); // Example for Cork
      *
@@ -880,7 +884,11 @@ class geonames {
      *
      *
      * Example of call (it assumes the main set is already done).
+     *     //Set the filter parameters
      *     POSITION parameters already set
+     *     $geo->set([
+     *        'lang'=>'en',   // (optional)
+     *     ]);
      *     // Call it
      *     $geo->findNearByWeather();
      *
