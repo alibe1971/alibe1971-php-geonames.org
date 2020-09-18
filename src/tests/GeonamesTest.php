@@ -509,4 +509,20 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('7.2',$t->earthquakes[0]->magnitude,'Not correct magnitude');
     }
 
+
+    /* weather Webservice */
+    public function testWeather() {
+        $this->geo->set([
+            'maxRows'=>1,
+            'geoBox'=>[
+                'north'=>44.1,
+                'south'=>-9.9,
+                'east'=>55.2,
+                'west'=>22.4,
+            ]
+        ]);
+        $t=$this->geo->weather();
+        $this->assertArrayHasKey('ICAO',(array) $t->weatherObservations[0],'Key not present');
+    }
+
 }
