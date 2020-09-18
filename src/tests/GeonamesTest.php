@@ -95,33 +95,33 @@ final class GeonamesTest extends TestCase {
     /* Get Webservice */
     public function testGet() {
         $t=$this->geo->get('3175395');
-        $this->assertEquals('Italy',$t->name,'Not correct geonamesId');
+        $this->assertEquals('Italy',$t->name,'Not correct name');
 
         // Change language Italian
         $this->geo->set([
             'lang'=>'it'
         ]);
         $t=$this->geo->get('3175395');
-        $this->assertEquals('Italia',$t->name,'Not correct geonamesId');
+        $this->assertEquals('Italia',$t->name,'Not correct name');
 
         // Reset language
         $this->geo->set([
             'lang'=>false
         ]);
         $t=$this->geo->get('3175395');
-        $this->assertEquals('Italy',$t->name,'Not correct geonamesId');
+        $this->assertEquals('Italy',$t->name,'Not correct name');
 
         // Change language Francese
         $this->geo->set([
             'lang'=>'fr'
         ]);
         $t=$this->geo->get('3175395');
-        $this->assertEquals('Italie',$t->name,'Not correct geonamesId');
+        $this->assertEquals('Italie',$t->name,'Not correct name');
 
         // Reset all
         $this->geo->reset();
         $t=$this->geo->get('3175395');
-        $this->assertEquals('Italy',$t->name,'Not correct geonamesId');
+        $this->assertEquals('Italy',$t->name,'Not correct name');
     }
 
     /* countryInfo Webservice */
@@ -476,6 +476,21 @@ final class GeonamesTest extends TestCase {
         ]);
         $t=$this->geo->findNearbyPOIsOSM();
         $this->assertEquals("McDonald's",$t->poi->name,'Not correct name');
+    }
+
+    /* Cities Webservice */
+    public function testCities() {
+        $this->geo->set([
+            'maxRows'=>1,
+            'geoBox'=>[
+                'north'=>44.1,
+                'south'=>-9.9,
+                'east'=>55.2,
+                'west'=>22.4,
+            ]
+        ]);
+        $t=$this->geo->cities();
+        $this->assertEquals('360630',$t->geonames[0]->geonameId,'Not correct geonamesId');
     }
 
 }
