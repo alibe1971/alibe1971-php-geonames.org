@@ -46,14 +46,6 @@ return [
             'q'=>false,         // General search
         ],
 
-        'address'=>[            // Address Search
-            'country'=>false,   // The country code
-            'postalCode'=>false,
-            'adminCode1'=>false,    // Administrative code
-            'adminCode2'=>false,
-            'adminCode3'=>false,
-            'isUniqueStreetName'=>false // Duplicate name are avoided
-        ],
         'search'=>[
             'q' => false,
             'name' => false,
