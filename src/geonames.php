@@ -1311,17 +1311,28 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function streetNameLookup($address) {
+    public function streetNameLookup($search) {
+        $arr=array(
+            'address'=>false,
+            'cc'=>false,
+            'zip'=>false,
+            'adminCode1'=>false,
+            'adminCode2'=>false,
+            'adminCode3'=>false,
+            'unique'=>false
+        );
+        $arr=array_replace($arr,$search);
         return $this->exe->get([
             'cmd'=>'streetNameLookup',
             'query'=>[
-                'q'=>rawurlencode($address),
-                'country'=>$this->conn['settings']['address']['country'],
-                'postalcode'=>$this->conn['settings']['address']['postalCode'],
-                'adminCode1'=>$this->conn['settings']['address']['adminCode1'],
-                'adminCode2'=>$this->conn['settings']['address']['adminCode2'],
-                'adminCode3'=>$this->conn['settings']['address']['adminCode3'],
-                'isUniqueStreetName'=>$this->conn['settings']['address']['isUniqueStreetName']
+                'q'=>rawurlencode($arr['address']),
+                'country'=>mb_strtoupper($arr['cc']),
+                'postalcode'=>mb_strtoupper($arr['zip']),
+                'adminCode1'=>mb_strtoupper($arr['adminCode1']),
+                'adminCode2'=>mb_strtoupper($arr['adminCode2']),
+                'adminCode3'=>mb_strtoupper($arr['adminCode3']),
+                'isUniqueStreetName'=>$arr['unique'],
+                'maxRows'=>$this->conn['settings']['maxRows']
             ]
         ]);
     }
