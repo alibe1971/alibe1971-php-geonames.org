@@ -585,9 +585,24 @@ final class GeonamesTest extends TestCase {
     }
 
     /* postalCodeLookup Webservice */
-    public function testpostalCodeLookup() {
+    public function testPostalCodeLookup() {
         $t=$this->geo->postalCodeLookup('05091','kr');
         $this->assertEquals('KR',$t->postalcodes[0]->countryCode,'Not correct countryCode');
+    }
+
+
+    /* address Webservice */
+    public function testAddress() {
+        $this->geo->set([
+            'position'=>[
+                'lat'=>52.358,
+                'lng'=>4.881,
+                'radius'=>500
+            ],
+            'maxRows'=>2
+        ]);
+        $t=$this->geo->address();
+        $this->assertEquals('NL',$t->address[0]->countryCode,'Not correct countryCode');
     }
 
 
