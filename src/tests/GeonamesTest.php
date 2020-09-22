@@ -590,6 +590,16 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('KR',$t->postalcodes[0]->countryCode,'Not correct countryCode');
     }
 
+    /* geoCodeAddress Webservice */
+    public function testGeoCodeAddress() {
+        $t=$this->geo->geoCodeAddress(
+            'Main',
+            'us',
+            '4217'
+        );
+        $this->assertEquals('Kentucky',$t->address->adminName1,'Not correct adminName1');
+    }
+
 
     /* address Webservice */
     public function testAddress() {
