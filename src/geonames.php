@@ -1258,28 +1258,28 @@ class geonames {
      * (see the geonames documentation)
      *
      * @param string $address, The address to search.
-     * The address optional search parameters has to be set previusly using the "set" method inside the section array 'address';
+     * @param string $cc, The country code.
+     * @param string $zip, The postal code.
      *
      * Example of call (it assumes the main set is already done).
-     *     //Set the search parameters
-     *     $geo->set([
-     *        'address'=>[
-     *            'country'=>'NL', (optional)
-     *            'postalCode'=>'false, (optional)
-     *        ]
-     *     ]);
      *     // Call it
-     *     $geo->geoCodeAddress('Museumplein 6');
+     *     $geo->geoCodeAddress(
+     *        'main',
+     *        'us',
+     *        '4212'
+     *     );
      *
      * @return object|array of the call.
     */
-    public function geoCodeAddress($address) {
+    public function geoCodeAddress($address,$cc=false,$zip=false) {
+        if($cc=='')  { $cc=false; }
+        if($zip=='') { $zip=false; }
         return $this->exe->get([
             'cmd'=>'geoCodeAddress',
             'query'=>[
                 'q'=>rawurlencode($address),
-                'country'=>$this->conn['settings']['address']['country'],
-                'postalcode'=>$this->conn['settings']['address']['postalCode']
+                'country'=>mb_strtoupper($cc),
+                'postalcode'=>mb_strtoupper($zip)
             ]
         ]);
     }
