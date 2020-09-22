@@ -251,12 +251,13 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function children($id,$hrk=false) {
+    public function children($id,$hierarchy=false) {
         return $this->exe->get([
             'cmd'=>'children',
             'query'=>[
                 'geonameId'=>$id,
-                'hierarchy'=>$hrk
+                'hierarchy'=>$hierarchy,
+                'maxRows'=>$this->conn['settings']['maxRows']
             ]
         ]);
     }
@@ -307,7 +308,7 @@ class geonames {
      * Neighbours call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/place-hierarchy.html#neighbours
      *
-     * @param integer|string $id, the geonameId or the countri code in the database of geonames.org.
+     * @param integer|string $id, the geonameId or the country code in the database of geonames.org.
      *
      * Example of call (it assumes the main set is already done).
      *     // Call it
@@ -334,7 +335,7 @@ class geonames {
      * Contains call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/place-hierarchy.html#contains
      *
-     * @param integer|string $id, the geonameId or the countri code in the database of geonames.org.
+     * @param integer|string $id, the geonameId or the country code in the database of geonames.org.
      *
      * Example of call (it assumes the main set is already done).
      *     //Set the filter parameters (optional)
@@ -354,6 +355,8 @@ class geonames {
                 'geonameId'=>$id,
                 'featureClass'=>$this->conn['settings']['featureClass'],
                 'featureCode'=>$this->conn['settings']['featureCode'],
+                'maxRows'=>$this->conn['settings']['maxRows'],
+                'EXCLUDEfeatureCode'=>$this->conn['settings']['EXCLUDEfeatureCode'],
             ]
         ]);
     }

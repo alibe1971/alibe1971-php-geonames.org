@@ -30,9 +30,9 @@ return [
             'east'=>false,
             'west'=>false,
         ],
-        'maxRows'=>false,       // Max number of rows
-        'date'=>false,        // date parameter
-        'level' => false,       // Administrative level
+        'maxRows'=>false,    // Max number of rows
+        'date'=>false,       // date parameter
+        'level' => false,    // Administr. level
         'minMagnitude'=>false,  // Min mag. for earthquakes
         'cities'=>false,        // cities
         'style'=>false,         // The verbosity

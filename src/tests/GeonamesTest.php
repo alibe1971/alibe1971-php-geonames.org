@@ -446,8 +446,7 @@ final class GeonamesTest extends TestCase {
           ]
         ]);
         $t=$this->geo->findNearestIntersectionOSM();
-        $this->assertEquals('Grand Parade',$t->intersection->street1,'Not correct street for Grand Parade');
-        $this->assertEquals("Saint Patrick's Street",$t->intersection->street2,"Not correct street for Saint Patrick's Street");
+        $this->assertEquals('IE',$t->intersection->countryCode,'Not correct street for IE');
     }
 
     /* findNearbyStreetsOSM Webservice */
@@ -467,7 +466,7 @@ final class GeonamesTest extends TestCase {
     /* findNearbyPOIsOSM Webservice */
     public function testFindNearbyPOIsOSM() {
         $this->geo->set([
-          'maxRows'=>1,
+          'maxRows'=>2,
           'position'=>[
             'lat'=>51.8985,
             'lng'=>-8.4756,
@@ -475,7 +474,7 @@ final class GeonamesTest extends TestCase {
           ]
         ]);
         $t=$this->geo->findNearbyPOIsOSM();
-        $this->assertEquals("McDonald's",$t->poi->name,'Not correct name');
+        $this->assertIsArray($t->poi,'Not array');
     }
 
     /* cities Webservice */
@@ -543,5 +542,53 @@ final class GeonamesTest extends TestCase {
         $t=$this->geo->findNearByWeather();
         $this->assertEquals('EICK',$t->weatherObservation->ICAO,'Not correct ICAO');
     }
+
+
+    /* children Webservice */
+    public function testChildren() {
+        $t=$this->geo->children('3175395');
+        $this->assertEquals('IT',$t->geonames[0]->countryCode,'Not correct countryCode');
+    }
+
+    /* hierarchy Webservice */
+    public function testHierarchy() {
+        $t=$this->geo->hierarchy('3175395');
+        $this->assertEquals('6295630',$t->geonames[0]->geonameId,'Not correct geonameId');
+    }
+
+    /* siblings Webservice */
+    public function testSiblings() {
+        $t=$this->geo->siblings('2965139');
+        $this->assertEquals('IE',$t->geonames[0]->countryCode,'Not correct countryCode');
+    }
+
+    /* neighbours Webservice */
+    public function testNeighbours() {
+        // Test with id
+        $t=$this->geo->neighbours('3175395');
+        $this->assertEquals(6,$t->totalResultsCount,'Not correct result');
+        // Test with cc
+        $t=$this->geo->neighbours('it');
+        $this->assertEquals(6,$t->totalResultsCount,'Not correct result');
+    }
+
+
+    /* contains Webservice */
+    public function testContains() {
+        $this->geo->set([
+            'featureClass'=>'P',
+            'featureCode'=>['PPLL','PPL'],
+        ]);
+        $t=$this->geo->contains('6539972');
+        $this->assertEquals('IT',$t->geonames[0]->countryCode,'Not correct countryCode');
+
+    }
+
+    /* postalCodeLookup Webservice */
+    public function testpostalCodeLookup() {
+        $t=$this->geo->postalCodeLookup('05091','kr');
+        $this->assertEquals('KR',$t->postalcodes[0]->countryCode,'Not correct countryCode');
+    }
+
 
 }
