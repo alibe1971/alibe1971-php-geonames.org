@@ -365,7 +365,7 @@ final class GeonamesTest extends TestCase {
         // Use the location (Switzerland)
         $this->geo->set([
             'position'=>[
-                'lat'=>'46.8525538',        'lng'=>'10.4666838',
+                'lat'=>46.8525538,        'lng'=>10.4666838,
                 'radius'=>30
             ],
             'style'=>'short',
@@ -615,5 +615,42 @@ final class GeonamesTest extends TestCase {
         $this->assertEquals('NL',$t->address[0]->countryCode,'Not correct countryCode');
     }
 
+    /* wikipediaBoundingBox Webservice */
+    public function testwikipediaBoundingBox() {
+        $this->geo->set([
+            'maxRows'=>10,
+            'geoBox'=>[
+                'north'=>44.1,
+                'south'=>-9.9,
+                'east'=>55.2,
+                'west'=>22.4,
+            ]
+        ]);
+        $t=$this->geo->wikipediaBoundingBox();
+        $this->assertArrayHasKey('wikipediaUrl',(array) $t->geonames[0],'Key not present');
+    }
+
+    /* findNearbyWikipedia Webservice */
+    public function testFindNearbyWikipedia() {
+        // Use the postal code
+        $this->geo->set([
+            'position'=>[
+                'radius'=>20,
+                'maxRows'=>1,
+            ]
+        ]);
+        $t=$this->geo->findNearbyWikipedia('pl','05091');
+        $this->assertArrayHasKey('wikipediaUrl',(array) $t->geonames[0],'Key not present');
+
+        // Use the location
+        $this->geo->set([
+            'position'=>[
+                'lat'=>51.8985,
+                'lng'=>-8.4756
+            ]
+        ]);
+        $t=$this->geo->findNearbyWikipedia('pl','05091');
+        $this->assertArrayHasKey('wikipediaUrl',(array) $t->geonames[0],'Key not present');
+    }
 
 }
