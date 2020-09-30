@@ -653,4 +653,18 @@ final class GeonamesTest extends TestCase {
         $this->assertArrayHasKey('wikipediaUrl',(array) $t->geonames[0],'Key not present');
     }
 
+
+    /* wikipediaSearch Webservice */
+    public function testWikipediaSearch() {
+        $this->geo->set([
+            'lang'=>'en',
+            'maxRows'=>200
+        ]);
+        $t=$this->geo->wikipediaSearch([
+            'title'=>'Cork',
+            'place'=>'Saints Peter and Paul',
+        ]);
+        $this->assertArrayHasKey('wikipediaUrl',(array) $t->geonames[0],'Key not present');
+    }
+
 }
