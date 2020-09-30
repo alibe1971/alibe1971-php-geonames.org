@@ -1024,44 +1024,40 @@ class geonames {
      * Search call to geonames.org for Wilipedia items.
      * Geonames.org documentation: https://www.geonames.org/export/wikipedia-webservice.html#wikipediaSearch
      *
-     * The search parameters has to be set previusly using the "set" method inside the section array 'wikiSearch';
-     * In the wikiSearch there are two properties that are each other alternative
-     * -"title" search inside the title (preeminent)
-     * -"q" search inside the body
+     * @param array $search, The search query.
      *
-     *     //Set the wikiSearch parameters
-     *     $geo->set([
-     *        'wikiSearch'=>[
-     *            'q'=>'london',
-     *        ]
-     *     ]);
-     *     OR
-     *     $geo->set([
-     *        'wikiSearch'=>[
-     *            'title'=>'london',
-     *        ]
-     *     ]);
-     *     Other parameters
+     * The search parameters has to be set in the inline array;
+     * In the search there are two properties that are each other alternative
+     * -"title" search inside the title (preeminent)
+     * -"place" search inside the body
+     *
+     *     //Set the parameters
      *     $geo->set([
      *        'lang'=>'en' (optional)
      *        'maxRows'=>20 (optional)
      *     ]);
      *     // Call it
-     *     $geo->search();
+     *     $geo->search([
+     *       'title'=>'Cork',
+     *       'place'=>'Saints Peter and Paul'
+     *     ]);
      *
      * @return object|array of the call.
     */
-    public function wikipediaSearch() {
+    public function wikipediaSearch($search) {
+        $arr=array(
+            'title'=>false,
+            'place'=>false
+        );
+        $arr=array_replace($arr,$search);
         $query=[
             'maxRows'=>$this->conn['settings']['maxRows']
         ];
-        if(isSet($this->conn['settings']['wikiSearch']) && is_array($this->conn['settings']['wikiSearch'])) {
-            $search=$this->conn['settings']['wikiSearch'];
-            if(isSet($search['title']) && $search['title']) {
-                $query['title']=$search['title'];
-            } elseif (isSet($search['q']) && $search['q']) {
-                $query['q']=rawurlencode(utf8_encode($search['q']));
-            }
+        if($arr['title']) {
+            $query['title']=$arr['title'];
+        }
+        if($arr['place']) {
+            $query['q']=rawurlencode(utf8_encode($arr['place']));
         }
         return $this->exe->get([
             'cmd'=>'wikipediaSearch',
@@ -1291,23 +1287,18 @@ class geonames {
      * RESTRICTION: service available only for some countries
      * (see the geonames documentation)
      *
-     * @param string $address, The address to search.
-     * The address optional search parameters has to be set previusly using the "set" method inside the section array 'address';
+     * @param array $search, The search query.
      *
      * Example of call (it assumes the main set is already done).
-     *     //Set the search parameters
-     *     $geo->set([
-     *        'address'=>[
-     *            'country'=>'AU', (optional)
-     *            'postalCode'=>''6530', (optional)
-     *            'adminCode1'=>'false, (optional)
-     *            'adminCode2'=>'false, (optional)
-     *            'adminCode3'=>'false, (optional)
-     *            'isUniqueStreetName'=>'false, (optional)
-     *        ]
-     *     ]);
      *     // Call it
-     *     $geo->streetNameLookup('Museum');
+     *     $geo->streetNameLookup([
+     *       'country'=>'AU', (optional)
+     *       'postalCode'=>''6530', (optional)
+     *       'adminCode1'=>'false, (optional)
+     *       'adminCode2'=>'false, (optional)
+     *       'adminCode3'=>'false, (optional)
+     *       'isUniqueStreetName'=>'false, (opt)
+     *     ]);
      *
      * @return object|array of the call.
     */
