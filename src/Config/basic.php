@@ -41,11 +41,6 @@ return [
         'filter'=>false,        // Filter for the searches
         'includeGeoName'=>false,    // For OpenStreetMap
 
-        'wikiSearch'=>[         // Wiki Search
-            'title'=>false,     // Title has priority
-            'q'=>false,         // General search
-        ],
-
         'search'=>[
             'q' => false,
             'name' => false,
