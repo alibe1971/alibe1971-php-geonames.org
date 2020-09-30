@@ -1002,7 +1002,7 @@ class geonames {
     public function findNearbyWikipedia($cc=false,$zip=false) {
         if($cc && $zip) {
             $query=[
-                'country'=>$cc,
+                'country'=>mb_strtoupper($cc),
                 'postalcode'=>$zip,
                 'maxRows'=>$this->conn['settings']['maxRows'],
                 'radius'=>$this->conn['settings']['position']['radius'],
@@ -1011,7 +1011,7 @@ class geonames {
             $query=$this->conn['settings']['position'];
             $query['maxRows']=$this->conn['settings']['maxRows'];
             if($cc) {
-                $query['country']=$cc;
+                $query['country']=mb_strtoupper($cc);
             }
         }
         return $this->exe->get([
