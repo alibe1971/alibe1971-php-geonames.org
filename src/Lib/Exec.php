@@ -98,9 +98,38 @@ class Exec {
     }
 
     protected function xmlConvert($res) {
-        $xml = simplexml_load_string($res);
-        return json_encode($xml);
+        $xml = simplexml_load_string($res, null, LIBXML_NOCDATA);
+        $ns = $xml->getNamespaces(true);
+        $rit=$this->sxeIter($xml,$ns);
+
+        return json_encode($rit);
     }
 
+    protected function sxeNsParse($obj,$ns) {
+        $r=array();
+        foreach($ns as $kn=>$n) {
+            $r[$kn]=$obj->children($ns[$kn]);
+        }
+        $r=array_merge($r,$this->sxeIter($obj,$ns));
+        return array_filter($r);
+    }
+
+    protected function sxeIter($sxe,$ns) {
+        $r=array();
+        foreach($sxe as $k=>$v) {
+            if($v->count()>1) {
+                if(isset($sxe->$k[1])) {
+                    for($j=0;$j<count($sxe->$k);$j++) {
+                        $r[$k][$j]=$this->sxeNsParse($sxe->$k[$j],$ns);
+                    }
+                } else {
+                    $r[$k]=$this->sxeNsParse($v,$ns);
+                }
+            } else {
+                $r[$k]= (string) $v;
+            }
+        }
+        return $r;
+    }
 
 }
