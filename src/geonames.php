@@ -220,10 +220,11 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function rssToGeo($url) {
+    public function rssToGeo($url, $cc=false) {
       $query=$this->conn['settings']['rssToGeo'];
       $query['feedUrl']=$url;
-      unset($query['type']);
+      $query['country']=$cc;
+      // unset($query['type']);
       return $this->exe->get([
           'cmd'=>'rssToGeo',
           'query'=>$query,
