@@ -78,21 +78,20 @@ return [
             'feedLanguage' => false,
             'type' => false,
             'geoRSS' => false,
-            'addUngeocodedItems' => false,
-            'country' => false,
+            'addUngeocodedItems' => false
         ],
-        'postalplace' => [
-            'postalcode' => false,
-            'postalcode_startsWith' => false,
-            'placename' => false,
-            'placename_startsWith' => false,
+        // 'postalplace' => [
+            // 'postalcode' => false,
+            // 'postalcode_startsWith' => false,
+            // 'placename' => false,
+            // 'placename_startsWith' => false,
 
-            'country' => false,
-            'countryBias' => false,
-            'style' => false,
-            'operator' => false,
-            'charset' => false,
-            'isReduced' => false,
+            // 'country' => false,
+            // 'countryBias' => false,
+            // 'style' => false,
+            // 'operator' => false,
+            // 'charset' => false,
+            // 'isReduced' => false,
         ]
     ]
 
