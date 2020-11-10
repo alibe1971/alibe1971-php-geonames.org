@@ -101,7 +101,6 @@ class Exec {
         $xml = simplexml_load_string($res, null, LIBXML_NOCDATA);
         $ns = $xml->getNamespaces(true);
         $rit=$this->sxeIter($xml,$ns);
-
         return json_encode($rit);
     }
 
