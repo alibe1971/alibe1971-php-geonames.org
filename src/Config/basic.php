@@ -92,7 +92,7 @@ return [
             // 'operator' => false,
             // 'charset' => false,
             // 'isReduced' => false,
-        ]
+        // ]
     ]
 
 ];
