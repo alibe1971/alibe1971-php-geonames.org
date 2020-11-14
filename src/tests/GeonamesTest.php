@@ -667,4 +667,23 @@ final class GeonamesTest extends TestCase {
         $this->assertArrayHasKey('wikipediaUrl',(array) $t->geonames[0],'Key not present');
     }
 
+    /* postalCodeSearch Webservice */
+    public function testPostalCodeSearch() {
+        $this->geo->set([
+            'geoBox'=>false,
+            'maxRows'=>10,
+            'charset'=>'UTF-8',
+            'isReduced'=>false,
+            'style'=>'full'
+        ]);
+
+        $t=$this->geo->postalCodeSearch([
+            'postalcode'=>'091',
+            'placename'=>'cork',
+            'operator'=>'or',
+            'countryBias'=>'ie'
+        ]);
+        $this->assertArrayHasKey('postalCode',(array) $t->postalCodes[0],'Key not present');
+    }
+
 }
