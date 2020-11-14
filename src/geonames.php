@@ -1147,29 +1147,20 @@ class geonames {
      * Postal Code or Place search call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#postalCodeSearch
      *
-     * @param string $req, The postal code or the place name
+     * @param array $req, has the following keys used for the search:
+     *  - postalcode @param string (it's possible to use the character "^" at the beginning to make the regular expession "it begin with")
+     *  - placename @param string (it's possible to use the character "^" at the beginning to make the regular expession "it begin with")
+     *  - cc  @param string|array (it can be a filter, if it's an array more countries can be specified) ISO-3166 country code (2 letter).
+     *  - operator  @param string (it can be "AND" or "OR")
+     *  - countryBias  @param string (if present it give a priority in the list for the defined country) ISO-3166 country code (2 letter).
      *
-     * The other search parameters has to be set previusly using the "set" method inside the section array 'postalplace';
+     * The other search parameters has to be set previusly using the "set" method;
      *
-     * Differentemente da geonames.org la struttura della richiesta è formulata nel modo seguente:
-     * Definition of the request. Mandatory. There should be only one parameter such as 'true'; if more parameters are present as 'true', the order of prevalence follows that shown in the example.
-     *     //Set the main search parameters
-     *     $geo->set([
-     *        'postalplace' => [
-     *            'postalcode' => true,
-     *            'postalcode_startsWith' => false,
-     *            'placename' => false,
-     *            'placename_startsWith' => false,
-     *        ]
-     *     ]);
-     * Definitions of specific options (always within the 'postalplace' section). Optional.
+     * Definitions of specific options. Optional.
      *     //Set the option search parameters
      *     $geo->set([
      *        'postalplace' => [
-     *            'country' => 'IT',
-     *            'countryBias' => false,
      *            'style' => 'FULL',
-     *            'operator' => 'AND',
      *            'charset' => 'UTF-8',
      *            'isReduced' => false,
      *        ]
@@ -1191,29 +1182,55 @@ class geonames {
      *     ]);
      *
      *     // Call it
-     *     $geo->postalCodeSearch('05035');
+     *     $geo->postalCodeSearch([
+     *          'postalcode'=>'091',
+     *          'placename'=>'cork',
+     *          'cc'=>[
+     *               'ie',
+     *               'us'
+     *           ],
+     *          'operator'=>'or',
+     *          'countryBias'=>'ie'
+     *     ]);
      *
      * @return object|array of the call.
     */
     public function postalCodeSearch($req) {
-        $req=rawurlencode($req);
+        // Preset
         $query=$this->conn['settings']['geoBox'];
         $query['maxRows']=$this->conn['settings']['maxRows'];
-        $pp=$this->conn['settings']['postalplace'];
-        if(isSet($pp['postalcode']) && $pp['postalcode']) {
-            $query['postalcode']=$req;
-        } elseif(isSet($pp['postalcode_startsWith']) && $pp['postalcode_startsWith']) {
-            $query['postalcode_startsWith']=$req;
-        } elseif(isSet($pp['placename']) && $pp['placename']) {
-            $query['placename']=$req;
-        } elseif(isSet($pp['placename_startsWith']) && $pp['placename_startsWith']) {
-            $query['placename_startsWith']=$req;
+        $query['isReduced']=$this->conn['settings']['isReduced'];
+        $query['charset']=$this->conn['settings']['charset'];
+        $query['style']=$this->conn['settings']['style'];
+
+        // Direct vars
+        if(isSet($req['postalcode']) && $req['postalcode']) {
+            $t=rawurlencode(preg_replace('/^\^/','',$req['postalcode'],1,$c));
+            if($c) {
+                $query['postalcode_startsWith']=$t;
+            } else {
+                $query['postalcode']=$t;
+            }
         }
-        unset($pp['postalcode']);
-        unset($pp['postalcode_startsWith']);
-        unset($pp['placename']);
-        unset($pp['placename_startsWith']);
-        $query=array_merge($query,$pp);
+        if(isSet($req['placename']) && $req['placename']) {
+            $t=rawurlencode(preg_replace('/^\^/','',$req['placename'],1,$c));
+            if($c) {
+                $query['placename_startsWith']=$t;
+            } else {
+                $query['placename']=$t;
+            }
+
+            if(isSet($req['operator']) && $req['operator']) {
+                $query['operator']=$req['operator'];
+            }
+        }
+        if(isSet($req['cc']) && $req['cc']) {
+            $query['country']=$req['cc'];
+        }
+        if(isSet($req['countryBias']) && $req['countryBias']) {
+            $query['countryBias']=$req['countryBias'];
+        }
+        // dd($query);
         return $this->exe->get([
             'cmd'=>'postalCodeSearch',
             'query'=>$query
