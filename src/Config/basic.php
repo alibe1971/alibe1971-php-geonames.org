@@ -31,6 +31,7 @@ return [
             'west'=>false,
         ],
         'maxRows'=>false,    // Max number of rows
+        'startRow'=>false,    // Rows number to jump
         'date'=>false,       // date parameter
         'level' => false,    // Administr. level
         'minMagnitude'=>false,  // Min mag. for earthquakes
@@ -40,39 +41,14 @@ return [
         'charset'=>false,       // The charset
         'filter'=>false,        // Filter for the searches
         'includeGeoName'=>false,    // For OpenStreetMap
-
         'search'=>[
-            'q' => false,
-            'name' => false,
-            'name_equals' => false,
-            'name_startsWith' => false,
-            'maxRows' => false,
-            'startRow' => false,
-            'country' => false,
-            'countryBias' => false,
-            'continentCode' => false,
-            'adminCode1' => false,
-            'adminCode2' => false,
-            'adminCode3' => false,
-            'adminCode4' => false,
-            'adminCode5' => false,
-            'featureClass' => false,
-            'featureCode' => false,
-            'cities' => false,
-            'lang' => false,
             'type' => false,
-            'style' => false,
             'isNameRequired' => false,
             'tag' => false,
-            'operator' => false,
-            'charset' => false,
             'fuzzy' => false,
-            'east' => false,
-            'west' => false,
-            'north' => false,
-            'south' => false,
             'searchlang' => false,
             'orderby' => false,
+            'inclBbox' => false,
         ],
         'rssToGeo'=>[
             'feedLanguage' => false,
@@ -80,19 +56,6 @@ return [
             'geoRSS' => false,
             'addUngeocodedItems' => false
         ],
-        // 'postalplace' => [
-            // 'postalcode' => false,
-            // 'postalcode_startsWith' => false,
-            // 'placename' => false,
-            // 'placename_startsWith' => false,
-
-            // 'country' => false,
-            // 'countryBias' => false,
-            // 'style' => false,
-            // 'operator' => false,
-            // 'charset' => false,
-            // 'isReduced' => false,
-        // ]
     ]
 
 ];
