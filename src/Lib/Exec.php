@@ -82,6 +82,7 @@ class Exec {
     }
 
     protected function output($res,$format) {
+        if(!$format) { $format='object'; }
         $format=mb_strtolower($format);
         switch($format) {
             case 'array':
