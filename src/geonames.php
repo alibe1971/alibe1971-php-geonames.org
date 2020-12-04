@@ -185,13 +185,43 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function search() {
+    public function search($arr) {
         $query=$this->conn['settings']['search'];
-        unset($query['type']);
-        return $this->exe->get([
-            'cmd'=>'search',
-            'query'=>$query
-        ]);
+        $query['maxRows']=$this->conn['settings']['maxRows'];
+        $query['startRow']=$this->conn['settings']['startRow'];
+        $query['style']=$this->conn['settings']['style'];
+        $query['charset']=$this->conn['settings']['charset'];
+        $query['cities']=$this->conn['settings']['cities'];
+        $query['featureClass']=$this->conn['settings']['featureClass'];
+        $query['featureCode']=$this->conn['settings']['featureCode'];
+
+        $base=[
+            'q'=>false,
+            'name'=>false,
+            'cc'=>false,
+            'operator'=>false,
+            'countryBias'=>false,
+            'continentCode'=>false,
+            'adminCode'=>false
+        ];
+
+        $arr = array_merge($base, array_intersect_key($arr, $base));
+
+        if(is_array($arr["cc"])) {
+            $arr["cc"]=array_filter($arr["cc"]);
+            if(count($arr["cc"])==0) {
+                unset($arr["cc"]);
+            }
+        }
+        if($arr["adminCode"] && is_array($arr["adminCode"])) {
+            $arr=array_merge($arr,$this->adminCodeBuild($arr["adminCode"], 5));
+            unset($arr["adminCode"]);
+        }
+        $arr=array_filter($arr);
+
+        dd($this->execByGeoBox('search',$query));
+        return $this->execByGeoBox('search',$query);
+
     }
 
       /***********************/
@@ -1347,6 +1377,19 @@ class geonames {
     }
 
       /*************************/
+     /* Build the adminCode   */
+    /*************************/
+    private function adminCodeBuild($arr, $x) {
+        $rit=[];
+        for($i=1;$i<=$x;$i++) {
+            if($arr[$i]){
+                $rit["adminCode".$i]=mb_strtoupper($arr[$i]);
+            }
+        }
+        return $rit;
+    }
+
+      /*************************/
      /* Execute by position   */
     /*************************/
     public function execByPosition(
@@ -1390,6 +1433,9 @@ class geonames {
             'query'=>$query
         ]);
     }
+
+
+
 
 
     /*Continents*/
