@@ -42,7 +42,7 @@ return [
         'filter'=>false,        // Filter for the searches
         'includeGeoName'=>false,    // For OpenStreetMap
         'search'=>[
-            'type' => false,
+            // 'type' => false, // removed because the type json is sufficient
             'isNameRequired' => false,
             'tag' => false,
             'fuzzy' => false,
