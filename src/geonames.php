@@ -218,8 +218,7 @@ class geonames {
             unset($arr["adminCode"]);
         }
         $arr=array_filter($arr);
-
-        dd($this->execByGeoBox('search',$query));
+        dd($this->execByGeoBox('search',$query,'','xmlConvert'));
         return $this->execByGeoBox('search',$query);
 
     }
@@ -1425,13 +1424,19 @@ class geonames {
       /***********************/
      /* Execute by geoBox   */
     /***********************/
-    public function execByGeoBox($cmd, $ar=[]) {
+    public function execByGeoBox(
+        $cmd,
+        $ar=[],
+        $fCall=false,
+        $preOutput=false
+    ) {
         $box=$this->conn['settings']['geoBox'];
         $query=array_merge($box,$ar);
         return $this->exe->get([
             'cmd'=>$cmd,
-            'query'=>$query
-        ]);
+            'query'=>$query,
+            'preOutput'=>$preOutput
+        ],$fCall);
     }
 
 
