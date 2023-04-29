@@ -1,6 +1,6 @@
 <?php
 
-namespace Alibe\Geonames\Tests;
+namespace Alibe\Geonames\tests;
 
 /*
 |---------------------------------------------------
