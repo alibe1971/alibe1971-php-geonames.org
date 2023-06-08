@@ -19,7 +19,6 @@ final class GeonamesTest extends TestCase {
 
     /* Inistializing */
     public function __construct() {
-        // username=pippo vendor/bin/phpunit src/tests
         parent::__construct();
         $this->geo=new geonames(getenv('username'));
     }
