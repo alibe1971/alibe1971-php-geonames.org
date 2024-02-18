@@ -8,7 +8,7 @@ namespace Alibe\Geonames\tests;
 |---------------------------------------------------
 | To launch the test, it's necessary to set an environment var with the username for the geonames.org service
 | i.e.
-|     username=myGeoNames.orgUserName vendor/bin/phpunit src/tests
+|     username=myGeoNamesOrgUserName vendor/bin/phpunit src/tests
 |
 */
 
@@ -21,7 +21,7 @@ final class GeonamesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->geo = new geonames(getenv('username'));
+        $this->geo = new GeoNames(getenv('username'));
     }
 
     public function testInitialize()
