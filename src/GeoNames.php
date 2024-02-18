@@ -4,7 +4,8 @@ namespace Alibe\Geonames;
 
 use Alibe\Geonames\Lib\Exec;
 
-class geonames {
+class GeoNames
+{
     /** @var array Default request options */
     protected $conn;
     protected $defSet;
@@ -21,16 +22,18 @@ class geonames {
      *     $geo = new Alibe\Geonames\geonames();
      *
     */
-    public function __construct($clID) {
-        $this->conn=include('Config/basic.php');
-        $this->defSet=$this->conn['settings'];
-        $this->clID=$clID;
+    public function __construct($clID)
+    {
+        $this->conn = include('Config/basic.php');
+        $this->defSet = $this->conn['settings'];
+        $this->clID = $clID;
         $this->set();
     }
 
     /**
      * Set the call parameters.
-     * The call settings remain for the execution of the script and they are used to create complex query to geonames.org api site.
+     * The call settings remain for the execution of the script and they are used to create complex query to
+     * geonames.org api site.
      *
      *
      * @param array $arr The array with the parameters to set
@@ -42,20 +45,22 @@ class geonames {
      * "format" is the format of the return for every call;
      *          it can be "object" (deafult) or "array";
      *          it is used for every call except for the rawCall, if that contain the parameter 'asIs' (see below)
-     * "lang" is optional; if it is present it is used by geonames.org api to translate the name of the location (where is possible)
+     * "lang" is optional; if it is present it is used by geonames.org api to translate the name of the location
+     * (where is possible)
      *
      * @return this object
     */
-    public function set($arr=[]) {
-        if(!empty($arr)) {
+    public function set($arr = [])
+    {
+        if (!empty($arr)) {
             foreach ($arr as $k => $v) {
-                if($v===false || $v===null) {
-                    $arr[$k]=$this->defSet[$k];
+                if ($v === false || $v === null) {
+                    $arr[$k] = $this->defSet[$k];
                 }
             }
         }
-        $this->conn['settings']=array_replace_recursive($this->conn['settings'],$arr);
-        $this->exe=new Exec($this->clID,$this->conn);
+        $this->conn['settings'] = array_replace_recursive($this->conn['settings'], $arr);
+        $this->exe = new Exec($this->clID, $this->conn);
         return $this;
     }
 
@@ -68,9 +73,10 @@ class geonames {
      *
      * @return this object
     */
-    public function reset() {
-        $this->conn['settings']=$this->defSet;
-        $this->exe=new Exec($this->clID,$this->conn);
+    public function reset()
+    {
+        $this->conn['settings'] = $this->defSet;
+        $this->exe = new Exec($this->clID, $this->conn);
         return $this;
     }
 
@@ -90,7 +96,8 @@ class geonames {
      *
      * @param string $command, the main command for the api
      * @param array $params, the array with the parameters to use for the call
-     * @param string $format, (optional, default as false) if it is set as false, the call ignore the format parameter and it return the raw response form the api call; else if it is set as string, it has to be 'object' or 'array'.
+     * @param string $format, (optional, default as false) if it is set as false, the call ignore the format parameter
+     * and it return the raw response form the api call; else if it is set as string, it has to be 'object' or 'array'.
      * Example of call
      *     $geo->rawCall(
      *         'getJSON',
@@ -102,37 +109,38 @@ class geonames {
      *
      * @return object|array|response of the call without filters.
     */
-    public function rawCall($command,$params=[],$format=false) {
-        $fCall='JSON';
-        $asIs=true;
-        $preset=$this->conn['settings']['format'];
-        if($format) {
-            $asIs=false;
-            if($format===true) {
-                $format=$preset;
+    public function rawCall($command, $params = [], $format = false)
+    {
+        $fCall = 'JSON';
+        $asIs = true;
+        $preset = $this->conn['settings']['format'];
+        if ($format) {
+            $asIs = false;
+            if ($format === true) {
+                $format = $preset;
             }
             $this->set([
-                'format'=>$format
+                'format' => $format
             ]);
             unset($params['type']);
-            $command=preg_replace('/JSON$/','',$command);
-            $command=preg_replace('/XML$/','',$command);
-            $command=preg_replace('/RDF$/','',$command);
-            $command=preg_replace('/CSV$/','',$command);
-            $command=preg_replace('/RSS$/','',$command);
-            if(preg_match('/^rssToGeo/',$command)) {
-                $fCall='RSS';
+            $command = preg_replace('/JSON$/', '', $command);
+            $command = preg_replace('/XML$/', '', $command);
+            $command = preg_replace('/RDF$/', '', $command);
+            $command = preg_replace('/CSV$/', '', $command);
+            $command = preg_replace('/RSS$/', '', $command);
+            if (preg_match('/^rssToGeo/', $command)) {
+                $fCall = 'RSS';
             }
         } else {
-            $fCall='';
+            $fCall = '';
         }
-        $call=$this->exe->get([
-            'cmd'=>$command,
-            'query'=>$params,
-            'asIs'=>$asIs
-        ],$fCall);
+        $call = $this->exe->get([
+            'cmd' => $command,
+            'query' => $params,
+            'asIs' => $asIs
+        ], $fCall);
         $this->set([
-            'format'=>$preset
+            'format' => $preset
         ]);
         return $call;
     }
@@ -156,11 +164,12 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function get($id) {
+    public function get($id)
+    {
         return $this->exe->get([
-            'cmd'=>'get',
-            'query'=>[
-                'geonameId'=>$id
+            'cmd' => 'get',
+            'query' => [
+                'geonameId' => $id
             ]
         ]);
     }
@@ -185,42 +194,42 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function search($arr) {
-        $query=$this->conn['settings']['search'];
-        $query['maxRows']=$this->conn['settings']['maxRows'];
-        $query['startRow']=$this->conn['settings']['startRow'];
-        $query['style']=$this->conn['settings']['style'];
-        $query['charset']=$this->conn['settings']['charset'];
-        $query['cities']=$this->conn['settings']['cities'];
-        $query['featureClass']=$this->conn['settings']['featureClass'];
-        $query['featureCode']=$this->conn['settings']['featureCode'];
+    public function search($arr)
+    {
+        $query = $this->conn['settings']['search'];
+        $query['maxRows'] = $this->conn['settings']['maxRows'];
+        $query['startRow'] = $this->conn['settings']['startRow'];
+        $query['style'] = $this->conn['settings']['style'];
+        $query['charset'] = $this->conn['settings']['charset'];
+        $query['cities'] = $this->conn['settings']['cities'];
+        $query['featureClass'] = $this->conn['settings']['featureClass'];
+        $query['featureCode'] = $this->conn['settings']['featureCode'];
 
-        $base=[
-            'q'=>false,
-            'name'=>false,
-            'cc'=>false,
-            'operator'=>false,
-            'countryBias'=>false,
-            'continentCode'=>false,
-            'adminCode'=>false
+        $base = [
+            'q' => false,
+            'name' => false,
+            'cc' => false,
+            'operator' => false,
+            'countryBias' => false,
+            'continentCode' => false,
+            'adminCode' => false
         ];
 
         $arr = array_merge($base, array_intersect_key($arr, $base));
 
-        if(is_array($arr["cc"])) {
-            $arr["cc"]=array_filter($arr["cc"]);
-            if(count($arr["cc"])==0) {
+        if (is_array($arr["cc"])) {
+            $arr["cc"] = array_filter($arr["cc"]);
+            if (count($arr["cc"]) == 0) {
                 unset($arr["cc"]);
             }
         }
-        if($arr["adminCode"] && is_array($arr["adminCode"])) {
-            $arr=array_merge($arr,$this->adminCodeBuild($arr["adminCode"], 5));
+        if ($arr["adminCode"] && is_array($arr["adminCode"])) {
+            $arr = array_merge($arr, $this->adminCodeBuild($arr["adminCode"], 5));
             unset($arr["adminCode"]);
         }
-        $arr=array_filter($arr);
-        dd($this->execByGeoBox('search',$query,'','xmlConvert'));
-        return $this->execByGeoBox('search',$query);
-
+        $arr = array_filter($arr);
+        dd($this->execByGeoBox('search', $query, '', 'xmlConvert'));
+        return $this->execByGeoBox('search', $query);
     }
 
       /***********************/
@@ -249,16 +258,17 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function rssToGeo($url, $cc=false) {
-      $query=$this->conn['settings']['rssToGeo'];
-      $query['feedUrl']=$url;
-      $query['country']=$cc;
+    public function rssToGeo($url, $cc = false)
+    {
+        $query = $this->conn['settings']['rssToGeo'];
+        $query['feedUrl'] = $url;
+        $query['country'] = $cc;
       // unset($query['type']);
-      return $this->exe->get([
-          'cmd'=>'rssToGeo',
-          'query'=>$query,
-          'preOutput'=>'xmlConvert'
-      ],'RSS');
+        return $this->exe->get([
+          'cmd' => 'rssToGeo',
+          'query' => $query,
+          'preOutput' => 'xmlConvert'
+        ], 'RSS');
     }
 
       /*******************************/
@@ -281,13 +291,14 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function children($id,$hierarchy=false) {
+    public function children($id, $hierarchy = false)
+    {
         return $this->exe->get([
-            'cmd'=>'children',
-            'query'=>[
-                'geonameId'=>$id,
-                'hierarchy'=>$hierarchy,
-                'maxRows'=>$this->conn['settings']['maxRows']
+            'cmd' => 'children',
+            'query' => [
+                'geonameId' => $id,
+                'hierarchy' => $hierarchy,
+                'maxRows' => $this->conn['settings']['maxRows']
             ]
         ]);
     }
@@ -304,11 +315,12 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function hierarchy($id) {
+    public function hierarchy($id)
+    {
         return $this->exe->get([
-            'cmd'=>'hierarchy',
-            'query'=>[
-                'geonameId'=>$id
+            'cmd' => 'hierarchy',
+            'query' => [
+                'geonameId' => $id
             ]
         ]);
     }
@@ -325,11 +337,12 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function siblings($id) {
+    public function siblings($id)
+    {
         return $this->exe->get([
-            'cmd'=>'siblings',
-            'query'=>[
-                'geonameId'=>$id
+            'cmd' => 'siblings',
+            'query' => [
+                'geonameId' => $id
             ]
         ]);
     }
@@ -346,18 +359,19 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function neighbours($id) {
-        $query=[
-            'geonameId'=>$id
+    public function neighbours($id)
+    {
+        $query = [
+            'geonameId' => $id
         ];
-        if(intval($id)==0) {
-            $query=[
-                'country'=>$id
+        if (intval($id) == 0) {
+            $query = [
+                'country' => $id
             ];
         }
         return $this->exe->get([
-            'cmd'=>'neighbours',
-            'query'=>$query
+            'cmd' => 'neighbours',
+            'query' => $query
         ]);
     }
 
@@ -378,15 +392,16 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function contains($id) {
+    public function contains($id)
+    {
         return $this->exe->get([
-            'cmd'=>'contains',
-            'query'=>[
-                'geonameId'=>$id,
-                'featureClass'=>$this->conn['settings']['featureClass'],
-                'featureCode'=>$this->conn['settings']['featureCode'],
-                'maxRows'=>$this->conn['settings']['maxRows'],
-                'EXCLUDEfeatureCode'=>$this->conn['settings']['EXCLUDEfeatureCode'],
+            'cmd' => 'contains',
+            'query' => [
+                'geonameId' => $id,
+                'featureClass' => $this->conn['settings']['featureClass'],
+                'featureCode' => $this->conn['settings']['featureCode'],
+                'maxRows' => $this->conn['settings']['maxRows'],
+                'EXCLUDEfeatureCode' => $this->conn['settings']['EXCLUDEfeatureCode'],
             ]
         ]);
     }
@@ -427,9 +442,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function cities() {
-        return $this->execByGeoBox('cities',[
-            'maxRows'=>$this->conn['settings']['maxRows']
+    public function cities()
+    {
+        return $this->execByGeoBox('cities', [
+            'maxRows' => $this->conn['settings']['maxRows']
         ]);
     }
 
@@ -451,11 +467,13 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function earthquakes() {
-        return $this->execByGeoBox('earthquakes',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
-            'date'=>($this->conn['settings']['date'])?date('Y-m-d',strtotime($this->conn['settings']['date'])):false,
-            'minMagnitude'=>$this->conn['settings']['minMagnitude'],
+    public function earthquakes()
+    {
+        return $this->execByGeoBox('earthquakes', [
+            'maxRows' => $this->conn['settings']['maxRows'],
+            'date' => ($this->conn['settings']['date']) ?
+                date('Y-m-d', strtotime($this->conn['settings']['date'])) : false,
+            'minMagnitude' => $this->conn['settings']['minMagnitude'],
         ]);
     }
 
@@ -464,7 +482,8 @@ class geonames {
      /* Position Webservices  */
     /*************************/
     /**
-     * The position settings is contains the coordinates for the position and the radius (in Km) where to search the data.
+     * The position settings is contains the coordinates for the position and the radius (in Km) where to search
+     * the data.
      * The position has to be set before to call the methods that use it.
      *     //Set the position
      *     $geo->set([
@@ -492,7 +511,8 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function countryCode() {
+    public function countryCode()
+    {
         return $this->execByPosition('countryCode');
     }
 
@@ -508,7 +528,8 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function ocean() {
+    public function ocean()
+    {
         return $this->execByPosition('ocean');
     }
 
@@ -530,10 +551,11 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function timezone() {
-        $date=($this->conn['settings']['date'])?$this->conn['settings']['date']:'today';
-        return $this->execByPosition('timezone',[
-            'date'=>date('Y-m-d',strtotime($date)),
+    public function timezone()
+    {
+        $date = ($this->conn['settings']['date']) ? $this->conn['settings']['date'] : 'today';
+        return $this->execByPosition('timezone', [
+            'date' => date('Y-m-d', strtotime($date)),
         ]);
     }
 
@@ -549,7 +571,8 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function neighbourhood() {
+    public function neighbourhood()
+    {
         return $this->execByPosition('neighbourhood');
     }
 
@@ -570,11 +593,12 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function countrySubdivision() {
-        return $this->execByPosition('countrySubdivision',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
-            'level'=>$this->conn['settings']['level']
-        ],'','xmlConvert');
+    public function countrySubdivision()
+    {
+        return $this->execByPosition('countrySubdivision', [
+            'maxRows' => $this->conn['settings']['maxRows'],
+            'level' => $this->conn['settings']['level']
+        ], '', 'xmlConvert');
     }
 
     /**
@@ -593,18 +617,19 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearby() {
-        return $this->execByPosition('findNearby',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
+    public function findNearby()
+    {
+        return $this->execByPosition('findNearby', [
+            'maxRows' => $this->conn['settings']['maxRows'],
 
-            'style'=>$this->conn['settings']['style'],
+            'style' => $this->conn['settings']['style'],
 
-            'localCountry'=>$this->conn['settings']['localCountry'],
+            'localCountry' => $this->conn['settings']['localCountry'],
 
-            'featureClass'=>$this->conn['settings']['featureClass'],
+            'featureClass' => $this->conn['settings']['featureClass'],
 
-            'featureCode'=>$this->conn['settings']['featureCode'],
-            'EXCLUDEfeatureCode'=>$this->conn['settings']['EXCLUDEfeatureCode'],
+            'featureCode' => $this->conn['settings']['featureCode'],
+            'EXCLUDEfeatureCode' => $this->conn['settings']['EXCLUDEfeatureCode'],
 
         ]);
     }
@@ -620,7 +645,8 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function extendedFindNearby() {
+    public function extendedFindNearby()
+    {
         return $this->execByPosition('extendedFindNearby');
     }
 
@@ -642,12 +668,13 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearbyPlaceName() {
-        return $this->execByPosition('findNearbyPlaceName',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
-            'localCountry'=>$this->conn['settings']['localCountry'],
-            'cities'=>$this->conn['settings']['cities'],
-            'style'=>$this->conn['settings']['style'],
+    public function findNearbyPlaceName()
+    {
+        return $this->execByPosition('findNearbyPlaceName', [
+            'maxRows' => $this->conn['settings']['maxRows'],
+            'localCountry' => $this->conn['settings']['localCountry'],
+            'cities' => $this->conn['settings']['cities'],
+            'style' => $this->conn['settings']['style'],
         ]);
     }
 
@@ -689,27 +716,28 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearbyPostalCodes($cc=false,$zip=false) {
-        if($cc && $zip) {
-            $query=[
-                'country'=>$cc,
-                'postalcode'=>$zip,
-                'maxRows'=>$this->conn['settings']['maxRows'],
-                'radius'=>$this->conn['settings']['position']['radius'],
+    public function findNearbyPostalCodes($cc = false, $zip = false)
+    {
+        if ($cc && $zip) {
+            $query = [
+                'country' => $cc,
+                'postalcode' => $zip,
+                'maxRows' => $this->conn['settings']['maxRows'],
+                'radius' => $this->conn['settings']['position']['radius'],
             ];
         } else {
-            $query=$this->conn['settings']['position'];
-            $query['maxRows']=$this->conn['settings']['maxRows'];
-            if($cc) {
-                $query['country']=$cc;
+            $query = $this->conn['settings']['position'];
+            $query['maxRows'] = $this->conn['settings']['maxRows'];
+            if ($cc) {
+                $query['country'] = $cc;
             }
-            $query['style']=$this->conn['settings']['style'];
-            $query['localCountry']=$this->conn['settings']['localCountry'];
-            $query['isReduced']=$this->conn['settings']['isReduced'];
+            $query['style'] = $this->conn['settings']['style'];
+            $query['localCountry'] = $this->conn['settings']['localCountry'];
+            $query['isReduced'] = $this->conn['settings']['isReduced'];
         }
         return $this->exe->get([
-            'cmd'=>'findNearbyPostalCodes',
-            'query'=>$query
+            'cmd' => 'findNearbyPostalCodes',
+            'query' => $query
         ]);
     }
 
@@ -730,9 +758,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearbyStreets() {
-        return $this->execByPosition('findNearbyStreets',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
+    public function findNearbyStreets()
+    {
+        return $this->execByPosition('findNearbyStreets', [
+            'maxRows' => $this->conn['settings']['maxRows'],
         ]);
     }
 
@@ -752,10 +781,11 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearestIntersection() {
-        return $this->execByPosition('findNearestIntersection',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
-            'filter'=>$this->conn['settings']['filter'],
+    public function findNearestIntersection()
+    {
+        return $this->execByPosition('findNearestIntersection', [
+            'maxRows' => $this->conn['settings']['maxRows'],
+            'filter' => $this->conn['settings']['filter'],
         ]);
     }
 
@@ -788,10 +818,11 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearestAddress($coords=[]) {
-        return $this->execByPosition('findNearestAddress',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
-            'coords'=>$coords
+    public function findNearestAddress($coords = [])
+    {
+        return $this->execByPosition('findNearestAddress', [
+            'maxRows' => $this->conn['settings']['maxRows'],
+            'coords' => $coords
         ]);
     }
 
@@ -811,10 +842,11 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearestIntersectionOSM() {
-        return $this->execByPosition('findNearestIntersectionOSM',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
-            'includeGeoName'=>$this->conn['settings']['includeGeoName'],
+    public function findNearestIntersectionOSM()
+    {
+        return $this->execByPosition('findNearestIntersectionOSM', [
+            'maxRows' => $this->conn['settings']['maxRows'],
+            'includeGeoName' => $this->conn['settings']['includeGeoName'],
         ]);
     }
 
@@ -833,9 +865,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearbyStreetsOSM() {
-        return $this->execByPosition('findNearbyStreetsOSM',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
+    public function findNearbyStreetsOSM()
+    {
+        return $this->execByPosition('findNearbyStreetsOSM', [
+            'maxRows' => $this->conn['settings']['maxRows'],
         ]);
     }
 
@@ -855,9 +888,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearbyPOIsOSM() {
-        return $this->execByPosition('findNearbyPOIsOSM',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
+    public function findNearbyPOIsOSM()
+    {
+        return $this->execByPosition('findNearbyPOIsOSM', [
+            'maxRows' => $this->conn['settings']['maxRows'],
         ]);
     }
 
@@ -881,9 +915,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function weather() {
-        return $this->execByGeoBox('weather',[
-            'maxRows'=>$this->conn['settings']['maxRows']
+    public function weather()
+    {
+        return $this->execByGeoBox('weather', [
+            'maxRows' => $this->conn['settings']['maxRows']
         ]);
     }
 
@@ -902,11 +937,12 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function weatherIcao($icaoCode) {
+    public function weatherIcao($icaoCode)
+    {
         return $this->exe->get([
-            'cmd'=>'weatherIcao',
-            'query'=>[
-                'ICAO'=>$icaoCode
+            'cmd' => 'weatherIcao',
+            'query' => [
+                'ICAO' => $icaoCode
             ]
         ]);
     }
@@ -927,7 +963,8 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearByWeather() {
+    public function findNearByWeather()
+    {
         return $this->execByPosition('findNearByWeather');
     }
 
@@ -960,9 +997,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function getAltitude(string $method) {
-        $m=['srtm1','srtm3','astergdem','gtopo30'];
-        if(!in_array($method,$m)) {
+    public function getAltitude(string $method)
+    {
+        $m = ['srtm1','srtm3','astergdem','gtopo30'];
+        if (!in_array($method, $m)) {
             return [];
         }
         return $this->execByPosition($method);
@@ -989,9 +1027,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function wikipediaBoundingBox() {
-        return $this->execByGeoBox('wikipediaBoundingBox',[
-            'maxRows'=>$this->conn['settings']['maxRows']
+    public function wikipediaBoundingBox()
+    {
+        return $this->execByGeoBox('wikipediaBoundingBox', [
+            'maxRows' => $this->conn['settings']['maxRows']
         ]);
     }
 
@@ -1029,24 +1068,25 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function findNearbyWikipedia($cc=false,$zip=false) {
-        if($cc && $zip) {
-            $query=[
-                'country'=>mb_strtoupper($cc),
-                'postalcode'=>$zip,
-                'maxRows'=>$this->conn['settings']['maxRows'],
-                'radius'=>$this->conn['settings']['position']['radius'],
+    public function findNearbyWikipedia($cc = false, $zip = false)
+    {
+        if ($cc && $zip) {
+            $query = [
+                'country' => mb_strtoupper($cc),
+                'postalcode' => $zip,
+                'maxRows' => $this->conn['settings']['maxRows'],
+                'radius' => $this->conn['settings']['position']['radius'],
             ];
         } else {
-            $query=$this->conn['settings']['position'];
-            $query['maxRows']=$this->conn['settings']['maxRows'];
-            if($cc) {
-                $query['country']=mb_strtoupper($cc);
+            $query = $this->conn['settings']['position'];
+            $query['maxRows'] = $this->conn['settings']['maxRows'];
+            if ($cc) {
+                $query['country'] = mb_strtoupper($cc);
             }
         }
         return $this->exe->get([
-            'cmd'=>'findNearbyWikipedia',
-            'query'=>$query
+            'cmd' => 'findNearbyWikipedia',
+            'query' => $query
         ]);
     }
 
@@ -1074,24 +1114,25 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function wikipediaSearch($search) {
-        $arr=array(
-            'title'=>false,
-            'place'=>false
+    public function wikipediaSearch($search)
+    {
+        $arr = array(
+            'title' => false,
+            'place' => false
         );
-        $arr=array_replace($arr,$search);
-        $query=[
-            'maxRows'=>$this->conn['settings']['maxRows']
+        $arr = array_replace($arr, $search);
+        $query = [
+            'maxRows' => $this->conn['settings']['maxRows']
         ];
-        if($arr['title']) {
-            $query['title']=$arr['title'];
+        if ($arr['title']) {
+            $query['title'] = $arr['title'];
         }
-        if($arr['place']) {
-            $query['q']=rawurlencode(utf8_encode($arr['place']));
+        if ($arr['place']) {
+            $query['q'] = rawurlencode(utf8_encode($arr['place']));
         }
         return $this->exe->get([
-            'cmd'=>'wikipediaSearch',
-            'query'=>$query
+            'cmd' => 'wikipediaSearch',
+            'query' => $query
         ]);
     }
 
@@ -1103,7 +1144,8 @@ class geonames {
      * Country params or country list call to geonames.org.
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#countryInfo
      *
-     * @param string|array $id, the iso  ISO-3166 country code (2 letter) (optional). By default it return the list of the countries.
+     * @param string|array $id, the iso  ISO-3166 country code (2 letter) (optional). By default it return the list of
+     * the countries.
      * If is present it can be a string (for a single country) or an array (for multiple countries).
      * Example of call
      *     //Set the optional parameters
@@ -1117,11 +1159,12 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function countryInfo($cc=false) {
+    public function countryInfo($cc = false)
+    {
         return $this->exe->get([
-            'cmd'=>'countryInfo',
-            'query'=>[
-                'country'=>$cc
+            'cmd' => 'countryInfo',
+            'query' => [
+                'country' => $cc
             ]
         ]);
     }
@@ -1136,9 +1179,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function postalCodeCountryInfo() {
+    public function postalCodeCountryInfo()
+    {
         return $this->exe->get([
-            'cmd'=>'postalCodeCountryInfo'
+            'cmd' => 'postalCodeCountryInfo'
         ]);
     }
 
@@ -1159,14 +1203,15 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function postalCodeLookup($zip,$cc=false) {
+    public function postalCodeLookup($zip, $cc = false)
+    {
         return $this->exe->get([
-            'cmd'=>'postalCodeLookup',
-            'query'=>[
-                'country'=>$cc,
-                'postalcode'=>$zip,
-                'maxRows'=>$this->conn['settings']['maxRows'],
-                'charset'=>$this->conn['settings']['charset'],
+            'cmd' => 'postalCodeLookup',
+            'query' => [
+                'country' => $cc,
+                'postalcode' => $zip,
+                'maxRows' => $this->conn['settings']['maxRows'],
+                'charset' => $this->conn['settings']['charset'],
             ]
         ]);
     }
@@ -1177,11 +1222,15 @@ class geonames {
      * Geonames.org documentation: https://www.geonames.org/export/web-services.html#postalCodeSearch
      *
      * @param array $req, has the following keys used for the search:
-     *  - postalcode @param string (it's possible to use the character "^" at the beginning to make the regular expession "it begin with")
-     *  - placename @param string (it's possible to use the character "^" at the beginning to make the regular expession "it begin with")
-     *  - cc  @param string|array (it can be a filter, if it's an array more countries can be specified) ISO-3166 country code (2 letter).
+     *  - postalcode @param string (it's possible to use the character "^" at the beginning to make the regular
+     *    expession "it begin with")
+     *  - placename @param string (it's possible to use the character "^" at the beginning to make the regular
+     *    expession "it begin with")
+     *  - cc  @param string|array (it can be a filter, if it's an array more countries can be specified) ISO-3166
+     *    country code (2 letter).
      *  - operator  @param string (it can be "AND" or "OR")
-     *  - countryBias  @param string (if present it give a priority in the list for the defined country) ISO-3166 country code (2 letter).
+     *  - countryBias  @param string (if present it give a priority in the list for the defined country) ISO-3166
+     *    country code (2 letter).
      *
      * The other search parameters has to be set previusly using the "set" method;
      *
@@ -1224,45 +1273,46 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function postalCodeSearch($req) {
+    public function postalCodeSearch($req)
+    {
         // Preset
-        $query=$this->conn['settings']['geoBox'];
-        $query['maxRows']=$this->conn['settings']['maxRows'];
-        $query['isReduced']=$this->conn['settings']['isReduced'];
-        $query['charset']=$this->conn['settings']['charset'];
-        $query['style']=$this->conn['settings']['style'];
+        $query = $this->conn['settings']['geoBox'];
+        $query['maxRows'] = $this->conn['settings']['maxRows'];
+        $query['isReduced'] = $this->conn['settings']['isReduced'];
+        $query['charset'] = $this->conn['settings']['charset'];
+        $query['style'] = $this->conn['settings']['style'];
 
         // Direct vars
-        if(isSet($req['postalcode']) && $req['postalcode']) {
-            $t=rawurlencode(preg_replace('/^\^/','',$req['postalcode'],1,$c));
-            if($c) {
-                $query['postalcode_startsWith']=$t;
+        if (isset($req['postalcode']) && $req['postalcode']) {
+            $t = rawurlencode(preg_replace('/^\^/', '', $req['postalcode'], 1, $c));
+            if ($c) {
+                $query['postalcode_startsWith'] = $t;
             } else {
-                $query['postalcode']=$t;
+                $query['postalcode'] = $t;
             }
         }
-        if(isSet($req['placename']) && $req['placename']) {
-            $t=rawurlencode(preg_replace('/^\^/','',$req['placename'],1,$c));
-            if($c) {
-                $query['placename_startsWith']=$t;
+        if (isset($req['placename']) && $req['placename']) {
+            $t = rawurlencode(preg_replace('/^\^/', '', $req['placename'], 1, $c));
+            if ($c) {
+                $query['placename_startsWith'] = $t;
             } else {
-                $query['placename']=$t;
+                $query['placename'] = $t;
             }
 
-            if(isSet($req['operator']) && $req['operator']) {
-                $query['operator']=$req['operator'];
+            if (isset($req['operator']) && $req['operator']) {
+                $query['operator'] = $req['operator'];
             }
         }
-        if(isSet($req['cc']) && $req['cc']) {
-            $query['country']=$req['cc'];
+        if (isset($req['cc']) && $req['cc']) {
+            $query['country'] = $req['cc'];
         }
-        if(isSet($req['countryBias']) && $req['countryBias']) {
-            $query['countryBias']=$req['countryBias'];
+        if (isset($req['countryBias']) && $req['countryBias']) {
+            $query['countryBias'] = $req['countryBias'];
         }
         // dd($query);
         return $this->exe->get([
-            'cmd'=>'postalCodeSearch',
-            'query'=>$query
+            'cmd' => 'postalCodeSearch',
+            'query' => $query
         ]);
     }
 
@@ -1287,9 +1337,10 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function address() {
-        return $this->execByPosition('address',[
-            'maxRows'=>$this->conn['settings']['maxRows'],
+    public function address()
+    {
+        return $this->execByPosition('address', [
+            'maxRows' => $this->conn['settings']['maxRows'],
         ]);
     }
 
@@ -1314,15 +1365,20 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function geoCodeAddress($address,$cc=false,$zip=false) {
-        if($cc=='')  { $cc=false; }
-        if($zip=='') { $zip=false; }
+    public function geoCodeAddress($address, $cc = false, $zip = false)
+    {
+        if ($cc == '') {
+            $cc = false;
+        }
+        if ($zip == '') {
+            $zip = false;
+        }
         return $this->exe->get([
-            'cmd'=>'geoCodeAddress',
-            'query'=>[
-                'q'=>rawurlencode($address),
-                'country'=>mb_strtoupper($cc),
-                'postalcode'=>mb_strtoupper($zip)
+            'cmd' => 'geoCodeAddress',
+            'query' => [
+                'q' => rawurlencode($address),
+                'country' => mb_strtoupper($cc),
+                'postalcode' => mb_strtoupper($zip)
             ]
         ]);
     }
@@ -1349,28 +1405,29 @@ class geonames {
      *
      * @return object|array of the call.
     */
-    public function streetNameLookup($search) {
-        $arr=array(
-            'address'=>false,
-            'cc'=>false,
-            'zip'=>false,
-            'adminCode1'=>false,
-            'adminCode2'=>false,
-            'adminCode3'=>false,
-            'unique'=>false
+    public function streetNameLookup($search)
+    {
+        $arr = array(
+            'address' => false,
+            'cc' => false,
+            'zip' => false,
+            'adminCode1' => false,
+            'adminCode2' => false,
+            'adminCode3' => false,
+            'unique' => false
         );
-        $arr=array_replace($arr,$search);
+        $arr = array_replace($arr, $search);
         return $this->exe->get([
-            'cmd'=>'streetNameLookup',
-            'query'=>[
-                'q'=>rawurlencode($arr['address']),
-                'country'=>mb_strtoupper($arr['cc']),
-                'postalcode'=>mb_strtoupper($arr['zip']),
-                'adminCode1'=>mb_strtoupper($arr['adminCode1']),
-                'adminCode2'=>mb_strtoupper($arr['adminCode2']),
-                'adminCode3'=>mb_strtoupper($arr['adminCode3']),
-                'isUniqueStreetName'=>$arr['unique'],
-                'maxRows'=>$this->conn['settings']['maxRows']
+            'cmd' => 'streetNameLookup',
+            'query' => [
+                'q' => rawurlencode($arr['address']),
+                'country' => mb_strtoupper($arr['cc']),
+                'postalcode' => mb_strtoupper($arr['zip']),
+                'adminCode1' => mb_strtoupper($arr['adminCode1']),
+                'adminCode2' => mb_strtoupper($arr['adminCode2']),
+                'adminCode3' => mb_strtoupper($arr['adminCode3']),
+                'isUniqueStreetName' => $arr['unique'],
+                'maxRows' => $this->conn['settings']['maxRows']
             ]
         ]);
     }
@@ -1378,11 +1435,12 @@ class geonames {
       /*************************/
      /* Build the adminCode   */
     /*************************/
-    private function adminCodeBuild($arr, $x) {
-        $rit=[];
-        for($i=1;$i<=$x;$i++) {
-            if($arr[$i]){
-                $rit["adminCode".$i]=mb_strtoupper($arr[$i]);
+    private function adminCodeBuild($arr, $x)
+    {
+        $rit = [];
+        for ($i = 1; $i <= $x; $i++) {
+            if ($arr[$i]) {
+                $rit["adminCode" . $i] = mb_strtoupper($arr[$i]);
             }
         }
         return $rit;
@@ -1393,21 +1451,21 @@ class geonames {
     /*************************/
     public function execByPosition(
         $cmd,
-        $ar=[],
-        $fCall=false,
-        $preOutput=false
+        $ar = [],
+        $fCall = false,
+        $preOutput = false
     ) {
-        $query=array_merge($this->conn['settings']['position'],$ar);
+        $query = array_merge($this->conn['settings']['position'], $ar);
 
-        if(!empty($ar['coords'])) {
-            $lats='';
-            $lngs='';
-            foreach($ar['coords'] as $c) {
-                $lats.=$c['lat'].',';
-                $lngs.=$c['lng'].',';
+        if (!empty($ar['coords'])) {
+            $lats = '';
+            $lngs = '';
+            foreach ($ar['coords'] as $c) {
+                $lats .= $c['lat'] . ',';
+                $lngs .= $c['lng'] . ',';
             }
-            $query['lats']=rtrim($lats,',');
-            $query['lngs']=rtrim($lngs,',');
+            $query['lats'] = rtrim($lats, ',');
+            $query['lngs'] = rtrim($lngs, ',');
 
             unset($query['lat']);
             unset($query['lng']);
@@ -1415,10 +1473,10 @@ class geonames {
         }
 
         return $this->exe->get([
-            'cmd'=>$cmd,
-            'query'=>$query,
-            'preOutput'=>$preOutput
-        ],$fCall);
+            'cmd' => $cmd,
+            'query' => $query,
+            'preOutput' => $preOutput
+        ], $fCall);
     }
 
       /***********************/
@@ -1426,17 +1484,17 @@ class geonames {
     /***********************/
     public function execByGeoBox(
         $cmd,
-        $ar=[],
-        $fCall=false,
-        $preOutput=false
+        $ar = [],
+        $fCall = false,
+        $preOutput = false
     ) {
-        $box=$this->conn['settings']['geoBox'];
-        $query=array_merge($box,$ar);
+        $box = $this->conn['settings']['geoBox'];
+        $query = array_merge($box, $ar);
         return $this->exe->get([
-            'cmd'=>$cmd,
-            'query'=>$query,
-            'preOutput'=>$preOutput
-        ],$fCall);
+            'cmd' => $cmd,
+            'query' => $query,
+            'preOutput' => $preOutput
+        ], $fCall);
     }
 
 
@@ -1444,17 +1502,19 @@ class geonames {
 
 
     /*Continents*/
-    public function continensGetList() {
+    public function continensGetList()
+    {
         return $this->children('6295630');
     }
 
     /*Countries*/
-    public function countriesGetList() {
+    public function countriesGetList()
+    {
         return $this->countryInfo();
     }
 
-    public function countryGet($cc) {
+    public function countryGet($cc)
+    {
         return $this->countryInfo($cc);
     }
-
 }
