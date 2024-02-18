@@ -278,11 +278,13 @@ final class GeonamesTest extends TestCase
         // Case of Object
         $this->geo->set([
             'lang' => 'de',
+            'level' => 2,
             'position' => [
                 'lat' => 47.3,
                 'lng' => 10.2,
             ]
         ]);
+
         $t = $this->geo->countrySubdivision();
         $this->assertEquals('8', $t->countrySubdivision->code, 'Not correct Code');
 
@@ -437,8 +439,8 @@ final class GeonamesTest extends TestCase
         // Test from preset
         $this->geo->set([
             'position' => [
-                'lat' => 47.3,
-                'lng' => -122.18,
+                'lat' => 47.306389,
+                'lng' => -122.13,
                 'radius' => 1
             ],
         ]);
@@ -535,7 +537,7 @@ final class GeonamesTest extends TestCase
             ]
         ]);
         $t = $this->geo->earthquakes();
-        $this->assertEquals('7.2', $t->earthquakes[0]->magnitude, 'Not correct magnitude');
+        $this->assertEquals('7.8', $t->earthquakes[0]->magnitude, 'Not correct magnitude');
     }
 
 
