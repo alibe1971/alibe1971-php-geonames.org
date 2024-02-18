@@ -19,23 +19,10 @@ final class GeonamesTest extends TestCase
 {
     private $geo;
 
-    /* Initializing */
-//    public function __construct()
-//    {
-//        parent::__construct();
-//        $this->geo = new geonames(getenv('username'));
-//    }
-
     protected function setUp(): void
     {
         $this->geo = new geonames(getenv('username'));
     }
-
-    /*
-    protected function tearDown() {
-        $this->geo = NULL;
-    }*/
-
 
     public function testInitialize()
     {
